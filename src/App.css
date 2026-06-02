@@ -1,0 +1,6 @@
+/* Local App styling - most styling is in index.css */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
