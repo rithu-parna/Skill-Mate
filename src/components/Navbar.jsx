@@ -1,207 +1,245 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
-import { Briefcase, Heart, Sun, Moon, LogIn, LogOut, User, Sparkles } from 'lucide-react';
+import { 
+  AppBar, 
+  Toolbar, 
+  Typography, 
+  Button, 
+  IconButton, 
+  Badge, 
+  Box, 
+  Avatar, 
+  Tooltip,
+  useTheme
+} from '@mui/material';
+import WorkIcon from '@mui/icons-material/Work';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashboard }) => {
-  const { currentUser, logoutUser, favorites, selectedProfileId } = useContext(AppContext);
-  const [isDark, setIsDark] = useState(true);
-
-  const toggleTheme = () => {
-    document.body.classList.toggle('light-theme');
-    setIsDark(!isDark);
-  };
+  const { currentUser, logoutUser, favorites, isDarkMode, toggleTheme } = useContext(AppContext);
+  const theme = useTheme();
 
   return (
-    <header className="glass" style={{
-      position: 'sticky',
-      top: 0,
-      zIndex: 50,
-      borderBottom: '1px solid var(--border-color)',
-      padding: '16px 0',
-      transition: 'all 0.3s ease'
-    }}>
-      <div className="container" style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        {/* Logo */}
-        <div
-          onClick={() => onShowDashboard(false)}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
+    <AppBar 
+      position="sticky" 
+      elevation={0}
+      sx={{
+        backgroundColor: theme.palette.background.glass,
+        backdropFilter: 'blur(12px)',
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        transition: 'all 0.3s ease',
+        top: 0,
+        zIndex: 50
+      }}
+    >
+      <Toolbar sx={{ justifyContent: 'space-between', minHeight: '70px' }}>
+        
+        {/* Logo Section */}
+        <Box 
+          onClick={() => onShowDashboard(false)} 
+          sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 1.5, 
             cursor: 'pointer',
             userSelect: 'none'
           }}
         >
-          <div style={{
-            background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
+          <Box sx={{
+            background: 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)',
             borderRadius: '12px',
-            padding: '8px',
+            width: '40px',
+            height: '40px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: '#fff',
-            boxShadow: 'var(--shadow-sm)'
+            boxShadow: theme.shadows[1]
           }}>
-            <Briefcase size={22} />
-          </div>
-          <div>
-            <h2 style={{
-              fontSize: '20px',
-              fontWeight: 800,
-              background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px'
-            }}>
-              SkillMate
-              <Sparkles size={14} style={{ color: 'var(--secondary)' }} />
-            </h2>
-            <span style={{ fontSize: '10px', color: 'var(--text-muted)', display: 'block', marginTop: '-2px', fontWeight: 600 }}>
-              JOB & CREATIVE MATRIMONY
-            </span>
-          </div>
-        </div>
-
-        {/* Action Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="btn btn-secondary btn-icon"
-            title="Toggle Theme"
-            style={{ borderRadius: 'var(--radius-full)', padding: '8px' }}
-          >
-            {isDark ? <Sun size={18} style={{ color: 'var(--warning)' }} /> : <Moon size={18} style={{ color: 'var(--primary)' }} />}
-          </button>
-
-          {/* Bookmarked Count (Static visual representation for matched interest) */}
-          <div
-            style={{
-              position: 'relative',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              color: favorites.length > 0 ? 'var(--secondary)' : 'var(--text-muted)',
-              padding: '8px',
-              transition: 'color 0.2s'
-            }}
-            title={`${favorites.length} Saved Profiles`}
-            onClick={() => onShowDashboard(true)}
-          >
-            <Heart size={20} fill={favorites.length > 0 ? 'var(--secondary)' : 'transparent'} />
-            {favorites.length > 0 && (
-              <span style={{
-                position: 'absolute',
-                top: '-2px',
-                right: '-2px',
-                background: 'var(--secondary)',
-                color: '#fff',
-                borderRadius: '50%',
-                width: '16px',
-                height: '16px',
-                fontSize: '9px',
-                fontWeight: 'bold',
+            <WorkIcon sx={{ fontSize: 22 }} />
+          </Box>
+          <Box>
+            <Typography 
+              variant="h6" 
+              component="h1"
+              sx={{ 
+                fontSize: '20px', 
+                fontWeight: 800, 
+                lineHeight: 1.1,
+                background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 0 5px rgba(236,72,153,0.5)'
-              }}>
-                {favorites.length}
-              </span>
-            )}
-          </div>
+                gap: '4px'
+              }}
+            >
+              SkillMate
+              <AutoAwesomeIcon sx={{ color: theme.palette.secondary.main, fontSize: 14 }} />
+            </Typography>
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                fontSize: '10px', 
+                color: theme.palette.text.secondary, 
+                display: 'block', 
+                marginTop: '1px',
+                fontWeight: 700,
+                letterSpacing: '0.05em'
+              }}
+            >
+              JOB & CREATIVE MATRIMONY
+            </Typography>
+          </Box>
+        </Box>
 
-          {/* Auth Controls */}
-          {currentUser ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div
-                onClick={() => onShowDashboard(!showDashboard)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  cursor: 'pointer',
-                  padding: '6px 12px',
-                  borderRadius: 'var(--radius-sm)',
-                  backgroundColor: 'var(--primary-light)',
-                  border: '1px solid rgba(99, 102, 241, 0.2)',
-                  transition: 'background-color 0.2s'
+        {/* Controls Section */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 } }}>
+          
+          {/* Light/Dark Toggle */}
+          <Tooltip title="Toggle Theme">
+            <IconButton 
+              onClick={toggleTheme} 
+              sx={{ 
+                border: `1px solid ${theme.palette.divider}`,
+                padding: '8px',
+                borderRadius: '50%',
+                color: isDarkMode ? theme.palette.warning.main : theme.palette.primary.main,
+                '&:hover': {
+                  backgroundColor: theme.palette.background.default
+                }
+              }}
+            >
+              {isDarkMode ? <LightModeIcon sx={{ fontSize: 18 }} /> : <DarkModeIcon sx={{ fontSize: 18 }} />}
+            </IconButton>
+          </Tooltip>
+
+          {/* Bookmarks Counter */}
+          <Tooltip title={`${favorites.length} Saved Profiles`}>
+            <IconButton 
+              onClick={() => onShowDashboard(true)}
+              sx={{ 
+                color: favorites.length > 0 ? theme.palette.secondary.main : theme.palette.text.secondary,
+                padding: '8px',
+                transition: 'color 0.2s'
+              }}
+            >
+              <Badge 
+                badgeContent={favorites.length} 
+                color="secondary"
+                sx={{
+                  '& .MuiBadge-badge': {
+                    fontSize: '10px',
+                    height: '16px',
+                    minWidth: '16px',
+                    padding: '0 4px',
+                    fontWeight: 'bold',
+                    boxShadow: '0 0 5px rgba(236,72,153,0.5)'
+                  }
                 }}
               >
-                <div style={{
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--primary)',
-                  color: '#fff',
+                <FavoriteIcon sx={{ fontSize: 20 }} />
+              </Badge>
+            </IconButton>
+          </Tooltip>
+
+          {/* Authentication Actions */}
+          {currentUser ? (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Box 
+                onClick={() => onShowDashboard(!showDashboard)}
+                sx={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '11px',
+                  gap: 1,
+                  cursor: 'pointer',
+                  padding: '6px 12px',
+                  borderRadius: 1.5,
+                  backgroundColor: theme.palette.primary.light,
+                  border: '1px solid rgba(99, 102, 241, 0.2)',
+                  transition: 'background-color 0.2s',
+                  '&:hover': {
+                    backgroundColor: 'rgba(99, 102, 241, 0.25)'
+                  }
+                }}
+              >
+                <Avatar sx={{
+                  width: 26,
+                  height: 26,
+                  backgroundColor: theme.palette.primary.main,
+                  color: '#fff',
+                  fontSize: '12px',
                   fontWeight: 'bold',
                   textTransform: 'uppercase'
                 }}>
                   {currentUser.name.charAt(0)}
-                </div>
-                <div style={{ display: 'none', flexDirection: 'column', textAlign: 'left' }} className="d-md-flex">
-                  <span style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-main)', lineHeight: '1' }}>
+                </Avatar>
+                
+                <Box sx={{ display: { xs: 'none', md: 'flex' }, flexDirection: 'column', textAlign: 'left' }}>
+                  <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold', color: theme.palette.text.primary, lineHeight: 1 }}>
                     {currentUser.name}
-                  </span>
-                  <span style={{ fontSize: '9px', color: 'var(--primary)', fontWeight: 'bold', textTransform: 'capitalize' }}>
+                  </Typography>
+                  <Typography variant="caption" sx={{ fontSize: '9px', color: theme.palette.primary.main, fontWeight: 700, textTransform: 'capitalize', mt: 0.2 }}>
                     {currentUser.accountType === 'employer' ? 'Recruiter' : 'Candidate'}
-                  </span>
-                </div>
-              </div>
+                  </Typography>
+                </Box>
+              </Box>
 
-              <button
+              <Button 
                 onClick={logoutUser}
-                className="btn btn-secondary btn-sm"
-                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                variant="outlined"
+                size="small"
+                startIcon={<LogoutIcon sx={{ fontSize: 14 }} />}
+                sx={{ 
+                  py: '6px',
+                  display: { xs: 'none', sm: 'inline-flex' }
+                }}
               >
-                <LogOut size={14} />
-                <span className="d-none d-md-inline">Logout</span>
-              </button>
-            </div>
+                Logout
+              </Button>
+              <IconButton 
+                onClick={logoutUser}
+                color="inherit"
+                sx={{ display: { xs: 'flex', sm: 'none' }, border: `1px solid ${theme.palette.divider}` }}
+              >
+                <LogoutIcon sx={{ fontSize: 16 }} />
+              </IconButton>
+            </Box>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <button
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Button 
                 onClick={onOpenLogin}
-                className="btn btn-secondary btn-sm"
-                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                variant="outlined"
+                size="small"
+                startIcon={<LoginIcon sx={{ fontSize: 14 }} />}
+                sx={{ py: '6px' }}
               >
-                <LogIn size={14} />
-                <span>Log In</span>
-              </button>
-              <button
+                Log In
+              </Button>
+              <Button 
                 onClick={onOpenRegister}
-                className="btn btn-primary btn-sm"
-                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                variant="contained"
+                size="small"
+                color="primary"
+                startIcon={<PersonAddIcon sx={{ fontSize: 14 }} />}
+                sx={{ 
+                  py: '6px',
+                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)'
+                }}
               >
-                <User size={14} />
-                <span>Register</span>
-              </button>
-            </div>
+                Register
+              </Button>
+            </Box>
           )}
-        </div>
-      </div>
 
-      {/* Small CSS helper for responsive display */}
-      <style>{`
-        @media (min-width: 768px) {
-          .d-md-flex { display: flex !important; }
-          .d-none { display: none !important; }
-        }
-        @media (max-width: 767px) {
-          .d-none { display: none !important; }
-          .d-md-inline { display: none !important; }
-        }
-      `}</style>
-    </header>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 };

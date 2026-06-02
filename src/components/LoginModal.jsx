@@ -1,17 +1,35 @@
 import React, { useState, useContext } from 'react';
 import { AppContext } from '../context/AppContext';
-import { X, Phone, Lock, Eye, EyeOff, ShieldAlert } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Dialog, 
+  DialogTitle, 
+  DialogContent, 
+  TextField, 
+  Button, 
+  Box, 
+  IconButton, 
+  Alert, 
+  CircularProgress, 
+  Typography, 
+  InputAdornment,
+  Link,
+  useTheme
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import PhoneIcon from '@mui/icons-material/Phone';
+import LockIcon from '@mui/icons-material/Lock';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
   const { loginUser } = useContext(AppContext);
+  const theme = useTheme();
+  
   const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,13 +42,11 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
 
     setLoading(true);
     
-    // Simulate slight delay for premium loading experience
     setTimeout(() => {
       const res = loginUser(mobile.trim(), password);
       setLoading(false);
       if (res.success) {
         onClose();
-        // Clear fields
         setMobile('');
         setPassword('');
       } else {
@@ -40,212 +56,179 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
   };
 
   return (
-    <AnimatePresence>
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(5, 7, 12, 0.85)',
-        backdropFilter: 'blur(8px)',
-        zIndex: 100,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '20px'
-      }} onClick={onClose}>
-        
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 250 }}
-          className="glass"
-          style={{
-            width: '100%',
-            maxWidth: '440px',
-            borderRadius: 'var(--radius-md)',
-            boxShadow: 'var(--shadow-lg)',
-            border: '1px solid var(--border-color)',
-            overflow: 'hidden',
-            position: 'relative'
+    <Dialog 
+      open={isOpen} 
+      onClose={onClose}
+      maxWidth="xs"
+      fullWidth
+      sx={{
+        '& .MuiDialog-paper': {
+          overflow: 'hidden',
+          position: 'relative'
+        }
+      }}
+    >
+      {/* Banner Head */}
+      <Box sx={{
+        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%)',
+        pt: 4,
+        px: 3,
+        pb: 2.5,
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        textAlign: 'center',
+        position: 'relative'
+      }}>
+        <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, mb: 0.5 }}>
+          Welcome Back
+        </Typography>
+        <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+          Log in to view contact details and match with opportunities.
+        </Typography>
+
+        {/* Close Button */}
+        <IconButton 
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            top: 16,
+            right: 16,
+            color: theme.palette.text.light,
+            '&:hover': {
+              color: theme.palette.text.primary
+            }
           }}
-          onClick={(e) => e.stopPropagation()}
         >
-          {/* Header design */}
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1))',
-            padding: '30px 24px 20px 24px',
-            borderBottom: '1px solid var(--border-color)',
-            textAlign: 'center',
-            position: 'relative'
-          }}>
-            <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', marginBottom: '8px' }}>
-              Welcome Back
-            </h2>
-            <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-              Log in to view contact details and match with opportunities.
-            </p>
-            
-            {/* Close Button */}
-            <button 
-              onClick={onClose}
-              style={{
-                position: 'absolute',
-                top: '16px',
-                right: '16px',
-                background: 'transparent',
-                border: 'none',
-                color: 'var(--text-light)',
-                cursor: 'pointer',
-                padding: '4px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'color 0.2s'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-main)'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-light)'}
-            >
-              <X size={20} />
-            </button>
-          </div>
+          <CloseIcon sx={{ fontSize: 20 }} />
+        </IconButton>
+      </Box>
 
-          {/* Form Content */}
-          <form onSubmit={handleSubmit} style={{ padding: '24px' }}>
-            {error && (
-              <div style={{
-                backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                borderRadius: 'var(--radius-sm)',
-                padding: '12px',
-                marginBottom: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                color: '#ef4444',
-                fontSize: '13px'
-              }}>
-                <ShieldAlert size={18} style={{ flexShrink: 0 }} />
-                <span>{error}</span>
-              </div>
-            )}
-
-            {/* Mobile Number Field */}
-            <div style={{ marginBottom: '20px' }}>
-              <label htmlFor="login-mobile">Mobile Number</label>
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                <Phone size={18} style={{
-                  position: 'absolute',
-                  left: '14px',
-                  color: 'var(--text-light)'
-                }} />
-                <input 
-                  id="login-mobile"
-                  type="tel" 
-                  placeholder="+1 (555) 000-0000"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  style={{ paddingLeft: '44px' }}
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Password Field */}
-            <div style={{ marginBottom: '24px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <label htmlFor="login-password" style={{ marginBottom: 0 }}>Password</label>
-                <a href="#" style={{ fontSize: '12px', color: 'var(--primary)' }} onClick={(e) => e.preventDefault()}>
-                  Forgot Password?
-                </a>
-              </div>
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                <Lock size={18} style={{
-                  position: 'absolute',
-                  left: '14px',
-                  color: 'var(--text-light)'
-                }} />
-                <input 
-                  id="login-password"
-                  type={showPassword ? 'text' : 'password'} 
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  style={{ paddingLeft: '44px', paddingRight: '44px' }}
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={{
-                    position: 'absolute',
-                    right: '14px',
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'var(--text-light)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center'
-                  }}
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <button 
-              type="submit" 
-              className="btn btn-primary"
-              disabled={loading}
-              style={{
-                width: '100%',
-                padding: '14px',
-                justifyContent: 'center',
-                fontSize: '15px',
-                marginBottom: '20px'
+      {/* Form Content */}
+      <DialogContent sx={{ p: 3, pt: 3.5 }}>
+        <form onSubmit={handleSubmit}>
+          
+          {error && (
+            <Alert 
+              severity="error" 
+              sx={{ 
+                mb: 2.5, 
+                borderRadius: 2, 
+                fontSize: '13px',
+                alignItems: 'center'
               }}
             >
-              {loading ? (
-                <div style={{
-                  width: '20px',
-                  height: '20px',
-                  border: '2.5px solid rgba(255,255,255,0.3)',
-                  borderTopColor: '#ffffff',
-                  borderRadius: '50%',
-                  animation: 'spin 0.8s linear infinite'
-                }} />
-              ) : 'Log In'}
-            </button>
+              {error}
+            </Alert>
+          )}
 
-            {/* Footer switcher */}
-            <div style={{ textAlign: 'center', fontSize: '13px', color: 'var(--text-muted)' }}>
+          {/* Mobile Field */}
+          <Box sx={{ mb: 2.5 }}>
+            <Typography variant="body2" sx={{ fontWeight: 600, mb: 1, color: theme.palette.text.primary, fontSize: '13px' }}>
+              Mobile Number
+            </Typography>
+            <TextField
+              fullWidth
+              placeholder="+1 (555) 000-0000"
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value)}
+              required
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PhoneIcon sx={{ fontSize: 18, color: theme.palette.text.light }} />
+                  </InputAdornment>
+                )
+              }}
+            />
+          </Box>
+
+          {/* Password Field */}
+          <Box sx={{ mb: 3 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: 600, color: theme.palette.text.primary, fontSize: '13px' }}>
+                Password
+              </Typography>
+              <Link 
+                href="#" 
+                onClick={(e) => e.preventDefault()}
+                sx={{ fontSize: '12px', color: theme.palette.primary.main, textDecoration: 'none', fontWeight: 600 }}
+              >
+                Forgot Password?
+              </Link>
+            </Box>
+            <TextField
+              fullWidth
+              type={showPassword ? 'text' : 'password'}
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockIcon sx={{ fontSize: 18, color: theme.palette.text.light }} />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                      sx={{ color: theme.palette.text.light }}
+                    >
+                      {showPassword ? <VisibilityOffIcon sx={{ fontSize: 18 }} /> : <VisibilityIcon sx={{ fontSize: 18 }} />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
+          </Box>
+
+          {/* Submit */}
+          <Button 
+            fullWidth
+            type="submit" 
+            variant="contained" 
+            color="primary"
+            disabled={loading}
+            sx={{
+              py: 1.5,
+              fontSize: '15px',
+              fontWeight: 'bold',
+              borderRadius: 2,
+              mb: 2.5,
+              background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)',
+              }
+            }}
+          >
+            {loading ? <CircularProgress size={20} color="inherit" /> : 'Log In'}
+          </Button>
+
+          {/* Register Redirect */}
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
               Don't have an account?{' '}
-              <a 
+              <Link 
                 href="#" 
                 onClick={(e) => {
                   e.preventDefault();
                   onSwitchToRegister();
                 }}
-                style={{ fontWeight: 'bold' }}
+                sx={{ 
+                  fontWeight: 'bold', 
+                  color: theme.palette.primary.main, 
+                  textDecoration: 'none',
+                  '&:hover': { textDecoration: 'underline' }
+                }}
               >
                 Register Now
-              </a>
-            </div>
-          </form>
+              </Link>
+            </Typography>
+          </Box>
 
-        </motion.div>
-      </div>
-
-      {/* Spin animation class */}
-      <style>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
-    </AnimatePresence>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };

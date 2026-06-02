@@ -1,6 +1,27 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
-import { MapPin, Briefcase, Award, Eye, Phone, Lock, Heart, GraduationCap } from 'lucide-react';
+import { 
+  Card, 
+  CardContent, 
+  CardActions, 
+  Typography, 
+  Button, 
+  IconButton, 
+  Avatar, 
+  Chip, 
+  Box, 
+  Grid, 
+  useTheme 
+} from '@mui/material';
+import MapPinIcon from '@mui/icons-material/Place';
+import AwardIcon from '@mui/icons-material/WorkspacePremium';
+import GraduationIcon from '@mui/icons-material/School';
+import BriefcaseIcon from '@mui/icons-material/Work';
+import PhoneIcon from '@mui/icons-material/Phone';
+import LockIcon from '@mui/icons-material/Lock';
+import HeartIcon from '@mui/icons-material/Favorite';
+import HeartBorderIcon from '@mui/icons-material/FavoriteBorder';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { motion } from 'framer-motion';
 
 export const JobCard = ({ profile }) => {
@@ -8,36 +29,38 @@ export const JobCard = ({ profile }) => {
     favorites, 
     toggleFavorite, 
     setSelectedProfileId, 
-    isContactUnlocked,
-    currentUser 
+    isContactUnlocked 
   } = useContext(AppContext);
+  
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
 
   const isFavorited = favorites.includes(profile.id);
   const isUnlocked = isContactUnlocked(profile.id);
 
-  // Define badges styling based on category
-  const categoryStyles = {
-    corporate: { bg: 'badge-primary', label: 'Corporate' },
-    creative: { bg: 'badge-secondary', label: 'Creative' },
-    technical: { bg: 'badge-accent', label: 'Technical' },
-    trades: { bg: 'badge-primary', label: 'Skilled Trade', customClass: 'badge-success-custom' }
+  // Define color mappings for category chips
+  const categoryColors = {
+    corporate: { bg: 'rgba(99, 102, 241, 0.15)', text: '#6366f1', label: 'Corporate' },
+    creative: { bg: 'rgba(236, 72, 153, 0.15)', text: '#ec4899', label: 'Creative' },
+    technical: { bg: 'rgba(6, 182, 212, 0.15)', text: '#06b6d4', label: 'Technical' },
+    trades: { bg: 'rgba(34, 197, 94, 0.15)', text: '#22c55e', label: 'Skilled Trade' }
   };
 
-  const catStyle = categoryStyles[profile.category] || { bg: 'badge-primary', label: profile.category };
+  const catDetails = categoryColors[profile.category] || { bg: 'rgba(99, 102, 241, 0.15)', text: '#6366f1', label: profile.category };
 
-  // Initials generator for fallback SVG
+  // Initials generator
   const getInitials = (name) => {
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
   };
 
-  // Generate a distinct gradient based on name string code
+  // Gradient generator
   const getGradient = (name) => {
     const colors = [
-      'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', // Indigo to Purple
-      'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)', // Pink to Rose
-      'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)', // Cyan to Blue
-      'linear-gradient(135deg, #10b981 0%, #059669 100%)', // Emerald to Green
-      'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', // Amber to Orange
+      'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
+      'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)',
+      'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
+      'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+      'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
     ];
     let sum = 0;
     for (let i = 0; i < name.length; i++) {
@@ -46,272 +69,280 @@ export const JobCard = ({ profile }) => {
     return colors[sum % colors.length];
   };
 
+  // Card specific indicator bar color
+  const getTopBarGradient = () => {
+    switch(profile.category) {
+      case 'creative':
+        return 'linear-gradient(90deg, #ec4899, #06b6d4)';
+      case 'technical':
+        return 'linear-gradient(90deg, #06b6d4, #6366f1)';
+      case 'trades':
+        return 'linear-gradient(90deg, #22c55e, #06b6d4)';
+      default:
+        return 'linear-gradient(90deg, #6366f1, #ec4899)';
+    }
+  };
+
   return (
-    <motion.div 
+    <motion.div
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.4 }}
-      className="glass-card"
-      style={{
+      style={{ height: '100%' }}
+    >
+      <Card sx={{
+        height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
         position: 'relative',
         overflow: 'hidden'
-      }}
-    >
-      {/* Decorative colored glow bar at the top */}
-      <div style={{
-        height: '4px',
-        width: '100%',
-        background: profile.category === 'creative' 
-          ? 'linear-gradient(90deg, var(--secondary), var(--accent))' 
-          : profile.category === 'technical'
-          ? 'linear-gradient(90deg, var(--accent), var(--primary))'
-          : profile.category === 'trades'
-          ? 'linear-gradient(90deg, var(--success), var(--accent))'
-          : 'linear-gradient(90deg, var(--primary), var(--secondary))'
-      }} />
-
-      {/* Card Header & Avatar */}
-      <div style={{ padding: '24px 24px 16px 24px', display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-        {profile.image ? (
-          <img 
-            src={profile.image} 
-            alt={profile.name} 
-            style={{
-              width: '72px',
-              height: '72px',
-              borderRadius: 'var(--radius-md)',
-              objectFit: 'cover',
-              border: '2px solid rgba(255, 255, 255, 0.1)',
-              boxShadow: 'var(--shadow-sm)'
-            }}
-          />
-        ) : (
-          <div style={{
-            width: '72px',
-            height: '72px',
-            borderRadius: 'var(--radius-md)',
-            background: getGradient(profile.name),
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#ffffff',
-            fontWeight: 800,
-            fontSize: '22px',
-            fontFamily: 'var(--font-display)',
-            border: '2px solid rgba(255, 255, 255, 0.1)',
-            boxShadow: 'var(--shadow-sm)'
-          }}>
-            {getInitials(profile.name)}
-          </div>
-        )}
-
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '4px' }}>
-            <span className={`badge ${catStyle.bg}`} style={{
-              backgroundColor: profile.category === 'trades' ? 'var(--primary-light)' : undefined,
-              color: profile.category === 'trades' ? 'var(--accent)' : undefined,
-            }}>
-              {catStyle.label}
-            </span>
-            <span style={{ fontSize: '11px', color: 'var(--text-light)', fontWeight: 600 }}>
-              {profile.joinedDate}
-            </span>
-          </div>
-
-          <h3 style={{ 
-            fontSize: '18px', 
-            fontWeight: 700, 
-            color: 'var(--text-main)',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            fontFamily: 'var(--font-display)'
-          }}>
-            {profile.name}
-          </h3>
-
-          <span style={{ 
-            fontSize: '13px', 
-            color: 'var(--text-muted)', 
-            fontWeight: 500,
-            display: 'block',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}>
-            {profile.role}
-          </span>
-        </div>
-      </div>
-
-      {/* Matrimony Details Section */}
-      <div style={{
-        padding: '0 24px 16px 24px',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: '8px 16px',
-        borderBottom: '1px dashed var(--border-color)',
-        margin: '0 0 16px 0'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
-          <Award size={14} style={{ color: 'var(--primary)', flexShrink: 0 }} />
-          <span style={{ color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            <strong>Exp:</strong> {profile.experience} Yrs
-          </span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
-          <GraduationCap size={14} style={{ color: 'var(--secondary)', flexShrink: 0 }} />
-          <span style={{ color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={profile.education}>
-            {profile.education.split(',')[0]}
-          </span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
-          <Briefcase size={14} style={{ color: 'var(--accent)', flexShrink: 0 }} />
-          <span style={{ color: 'var(--text-muted)' }}>
-            <strong>Salary:</strong> {profile.salary.split(' ')[0]}
-          </span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
-          <span style={{ color: 'var(--text-light)', fontWeight: 600 }}>Age/Sex:</span>
-          <span style={{ color: 'var(--text-muted)' }}>
-            {profile.age} / {profile.gender.charAt(0)}
-          </span>
-        </div>
-      </div>
+        
+        {/* Top Gradient Decorative Line */}
+        <Box sx={{
+          height: '4px',
+          width: '100%',
+          background: getTopBarGradient()
+        }} />
 
-      {/* Bio Snippet */}
-      <div style={{ padding: '0 24px 16px 24px', flexGrow: 1 }}>
-        <p style={{
-          fontSize: '13px',
-          color: 'var(--text-muted)',
-          display: '-webkit-box',
-          WebkitLineClamp: 3,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          lineHeight: '1.5',
-          margin: 0
-        }}>
-          {profile.bio}
-        </p>
-      </div>
-
-      {/* Skills Pills */}
-      <div style={{ 
-        padding: '0 24px 20px 24px', 
-        display: 'flex', 
-        flexWrap: 'wrap', 
-        gap: '6px',
-        maxHeight: '68px',
-        overflow: 'hidden'
-      }}>
-        {profile.skills.slice(0, 4).map((skill, index) => (
-          <span key={index} style={{
-            fontSize: '11px',
-            backgroundColor: 'rgba(255, 255, 255, 0.04)',
-            color: 'var(--text-muted)',
-            padding: '4px 8px',
-            borderRadius: '4px',
-            border: '1px solid var(--border-color)',
-            fontWeight: 500
-          }}>
-            {skill}
-          </span>
-        ))}
-        {profile.skills.length > 4 && (
-          <span style={{
-            fontSize: '10px',
-            color: 'var(--primary)',
-            padding: '4px 6px',
-            fontWeight: 600,
-            alignSelf: 'center'
-          }}>
-            +{profile.skills.length - 4} more
-          </span>
-        )}
-      </div>
-
-      {/* Card Footer (Actions & Location) */}
-      <div style={{
-        padding: '16px 24px',
-        backgroundColor: 'rgba(15, 22, 36, 0.4)',
-        borderTop: '1px solid var(--border-color)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '12px'
-      }}>
-        {/* Location */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px', minWidth: 0 }}>
-          <MapPin size={14} style={{ color: 'var(--text-light)', flexShrink: 0 }} />
-          <span style={{ 
-            color: 'var(--text-muted)',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}>
-            {profile.location.split(',')[0]}
-          </span>
-        </div>
-
-        {/* Action Button */}
-        <button 
-          onClick={() => setSelectedProfileId(profile.id)}
-          className={`btn btn-sm ${isUnlocked ? 'btn-secondary' : 'btn-accent'}`}
-          style={{
-            padding: '8px 16px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px'
+        {/* Floating Bookmark */}
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleFavorite(profile.id);
+          }}
+          sx={{
+            position: 'absolute',
+            top: 16,
+            right: 16,
+            backgroundColor: isDark ? 'rgba(15, 22, 36, 0.6)' : 'rgba(255, 255, 255, 0.8)',
+            border: `1px solid ${theme.palette.divider}`,
+            color: isFavorited ? theme.palette.secondary.main : theme.palette.text.light,
+            boxShadow: theme.shadows[1],
+            zIndex: 5,
+            width: 32,
+            height: 32,
+            '&:hover': {
+              backgroundColor: isDark ? '#1e293b' : '#f1f5f9'
+            }
           }}
         >
-          {isUnlocked ? (
-            <>
-              <Phone size={13} style={{ color: 'var(--success)' }} />
-              <span>Contact Unlocked</span>
-            </>
-          ) : (
-            <>
-              <Lock size={12} />
-              <span>Show Contact</span>
-            </>
-          )}
-        </button>
-      </div>
+          {isFavorited ? <HeartIcon sx={{ fontSize: 16 }} /> : <HeartBorderIcon sx={{ fontSize: 16 }} />}
+        </IconButton>
 
-      {/* Floating Bookmark Button */}
-      <button 
-        onClick={(e) => {
-          e.stopPropagation();
-          toggleFavorite(profile.id);
-        }}
-        style={{
-          position: 'absolute',
-          top: '16px',
-          right: '16px',
-          background: 'rgba(15, 22, 36, 0.6)',
-          border: '1px solid var(--border-color)',
-          borderRadius: '50%',
-          width: '32px',
-          height: '32px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          color: isFavorited ? 'var(--secondary)' : 'var(--text-muted)',
-          boxShadow: 'var(--shadow-sm)',
-          transition: 'all 0.2s',
-          zIndex: 5
-        }}
-        title={isFavorited ? "Remove Bookmark" : "Bookmark Profile"}
-      >
-        <Heart size={16} fill={isFavorited ? 'var(--secondary)' : 'transparent'} />
-      </button>
+        {/* Card Body */}
+        <CardContent sx={{ p: 3, pb: 2, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+          
+          {/* Avatar and Primary Header */}
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start', mb: 2 }}>
+            {profile.image ? (
+              <Avatar
+                src={profile.image}
+                variant="rounded"
+                sx={{
+                  width: 72,
+                  height: 72,
+                  border: `2px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'}`,
+                  boxShadow: theme.shadows[1]
+                }}
+              />
+            ) : (
+              <Avatar
+                variant="rounded"
+                sx={{
+                  width: 72,
+                  height: 72,
+                  background: getGradient(profile.name),
+                  border: `2px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'}`,
+                  color: '#fff',
+                  fontWeight: 800,
+                  fontSize: '22px',
+                  fontFamily: 'var(--font-display)',
+                  boxShadow: theme.shadows[1]
+                }}
+              >
+                {getInitials(profile.name)}
+              </Avatar>
+            )}
+
+            <Box sx={{ minWidth: 0, flexGrow: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 0.5 }}>
+                <Chip 
+                  label={catDetails.label} 
+                  size="small"
+                  sx={{
+                    backgroundColor: catDetails.bg,
+                    color: catDetails.text,
+                    fontWeight: 700,
+                    fontSize: '10px',
+                    height: '20px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em'
+                  }}
+                />
+                <Typography variant="caption" sx={{ color: theme.palette.text.light, fontWeight: 600 }}>
+                  {profile.joinedDate}
+                </Typography>
+              </Box>
+
+              <Typography 
+                variant="h6" 
+                noWrap 
+                sx={{ 
+                  fontWeight: 700, 
+                  fontSize: '17px',
+                  color: theme.palette.text.primary,
+                  fontFamily: 'var(--font-display)'
+                }}
+              >
+                {profile.name}
+              </Typography>
+
+              <Typography 
+                variant="body2" 
+                noWrap 
+                sx={{ 
+                  color: theme.palette.text.secondary, 
+                  fontWeight: 500
+                }}
+              >
+                {profile.role}
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Grid stats (Matrimony Style) */}
+          <Box sx={{
+            borderBottom: `1px dashed ${theme.palette.divider}`,
+            pb: 2,
+            mb: 2
+          }}>
+            <Grid container spacing={1.5}>
+              <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                <AwardIcon sx={{ fontSize: 16, color: theme.palette.primary.main, flexShrink: 0 }} />
+                <Typography variant="caption" noWrap sx={{ color: theme.palette.text.secondary }}>
+                  <strong>Exp:</strong> {profile.experience} Yrs
+                </Typography>
+              </Grid>
+              <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                <GraduationIcon sx={{ fontSize: 16, color: theme.palette.secondary.main, flexShrink: 0 }} />
+                <Typography variant="caption" noWrap sx={{ color: theme.palette.text.secondary }} title={profile.education}>
+                  {profile.education.split(',')[0]}
+                </Typography>
+              </Grid>
+              <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                <BriefcaseIcon sx={{ fontSize: 16, color: theme.palette.accent.main, flexShrink: 0 }} />
+                <Typography variant="caption" noWrap sx={{ color: theme.palette.text.secondary }}>
+                  <strong>Salary:</strong> {profile.salary.split(' ')[0]}
+                </Typography>
+              </Grid>
+              <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                <Typography variant="caption" sx={{ color: theme.palette.text.light, fontWeight: 700 }}>
+                  Age/Sex:
+                </Typography>
+                <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
+                  {profile.age} / {profile.gender.charAt(0)}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Box>
+
+          {/* Biography Snippet */}
+          <Box sx={{ flexGrow: 1, mb: 2.5 }}>
+            <Typography 
+              variant="body2" 
+              sx={{
+                color: theme.palette.text.secondary,
+                fontSize: '13px',
+                lineHeight: 1.5,
+                display: '-webkit-box',
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}
+            >
+              {profile.bio}
+            </Typography>
+          </Box>
+
+          {/* Skill Badges */}
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, maxHeight: '68px', overflow: 'hidden' }}>
+            {profile.skills.slice(0, 4).map((skill, index) => (
+              <Chip 
+                key={index}
+                label={skill}
+                size="small"
+                variant="outlined"
+                sx={{
+                  fontSize: '11px',
+                  height: '22px',
+                  borderRadius: '4px',
+                  borderColor: theme.palette.divider,
+                  color: theme.palette.text.secondary,
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0,0,0,0.01)'
+                }}
+              />
+            ))}
+            {profile.skills.length > 4 && (
+              <Typography 
+                variant="caption" 
+                sx={{ 
+                  color: theme.palette.primary.main, 
+                  fontWeight: 700, 
+                  alignSelf: 'center',
+                  ml: 0.5
+                }}
+              >
+                +{profile.skills.length - 4} more
+              </Typography>
+            )}
+          </Box>
+
+        </CardContent>
+
+        {/* Card Actions Footer */}
+        <CardActions sx={{
+          px: 3,
+          py: 2,
+          backgroundColor: isDark ? 'rgba(15, 22, 36, 0.4)' : 'rgba(0,0,0,0.01)',
+          borderTop: `1px solid ${theme.palette.divider}`,
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          {/* Location */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, minWidth: 0, mr: 1 }}>
+            <MapPinIcon sx={{ fontSize: 16, color: theme.palette.text.light, flexShrink: 0 }} />
+            <Typography variant="caption" noWrap sx={{ color: theme.palette.text.secondary }}>
+              {profile.location.split(',')[0]}
+            </Typography>
+          </Box>
+
+          {/* Actions Button */}
+          <Button
+            onClick={() => setSelectedProfileId(profile.id)}
+            variant={isUnlocked ? "outlined" : "contained"}
+            color={isUnlocked ? "secondary" : "primary"}
+            size="small"
+            startIcon={isUnlocked ? <CheckCircleIcon sx={{ fontSize: 13 }} /> : <LockIcon sx={{ fontSize: 13 }} />}
+            sx={{
+              py: '7px',
+              px: '14px',
+              borderRadius: 1.5,
+              background: !isUnlocked ? 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)' : undefined,
+              '&:hover': {
+                background: !isUnlocked ? 'linear-gradient(135deg, #4f46e5 0%, #db2777 100%)' : undefined,
+              }
+            }}
+          >
+            {isUnlocked ? "Contact Unlocked" : "Show Contact"}
+          </Button>
+
+        </CardActions>
+
+      </Card>
     </motion.div>
   );
 };

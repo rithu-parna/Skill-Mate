@@ -40,6 +40,30 @@ export const AppProvider = ({ children }) => {
   // Selected profile for Detail Modal
   const [selectedProfileId, setSelectedProfileId] = useState(null);
 
+  // Theme settings state (dark mode by default)
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('careermatch_darkmode');
+    return saved ? JSON.parse(saved) : true;
+  });
+
+  const toggleTheme = () => {
+    setIsDarkMode(prev => {
+      const next = !prev;
+      localStorage.setItem('careermatch_darkmode', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-theme');
+      document.body.classList.remove('light-theme');
+    } else {
+      document.body.classList.add('light-theme');
+      document.body.classList.remove('dark-theme');
+    }
+  }, [isDarkMode]);
+
   // Sync to localStorage
   useEffect(() => {
     localStorage.setItem('careermatch_profiles', JSON.stringify(profiles));
@@ -211,6 +235,8 @@ export const AppProvider = ({ children }) => {
       setFilters,
       selectedProfileId,
       setSelectedProfileId,
+      isDarkMode,
+      toggleTheme,
       registerJobSeeker,
       registerEmployer,
       loginUser,

@@ -8,12 +8,31 @@ import { ProfileDetailModal } from './components/ProfileDetailModal';
 import { Dashboard } from './components/Dashboard';
 import { AppContext } from './context/AppContext';
 import { categories } from './data/mockProfiles';
-import { Filter, Sparkles, Star, ChevronDown, CheckCircle } from 'lucide-react';
+import { getAppTheme } from './theme';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { 
+  Box, 
+  Container, 
+  Typography, 
+  Button, 
+  Grid, 
+  Select, 
+  MenuItem, 
+  FormControl, 
+  InputLabel, 
+  Link,
+  Divider,
+  useTheme
+} from '@mui/material';
+import FilterIcon from '@mui/icons-material/FilterAlt';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 import { motion, AnimatePresence } from 'framer-motion';
 
-function App() {
-  const { profiles, filters, setFilters, selectedProfileId } = useContext(AppContext);
-  
+function AppContent() {
+  const { profiles, filters, setFilters, selectedProfileId, isDarkMode } = useContext(AppContext);
+  const theme = useTheme();
+
   // Modal open states
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -73,8 +92,10 @@ function App() {
     });
   };
 
+  const hasActiveFilters = filters.search || filters.category !== 'all' || filters.location || filters.experience !== 'all';
+
   return (
-    <div className="app-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: theme.palette.background.default }}>
       
       {/* Navigation header */}
       <Navbar 
@@ -84,7 +105,7 @@ function App() {
         showDashboard={showDashboard}
       />
 
-      <main style={{ flexGrow: 1 }}>
+      <Box component="main" sx={{ flexGrow: 1 }}>
         {showDashboard ? (
           /* WORKSPACE DASHBOARD VIEW */
           <Dashboard 
@@ -98,193 +119,198 @@ function App() {
             <HeroSection />
 
             {/* Content Filters & Directory list */}
-            <section style={{ padding: '50px 0 80px 0' }}>
-              <div className="container">
-                
-                {/* Filters Panel Header */}
-                <div style={{
+            <Container maxWidth="lg" sx={{ py: { xs: 6, md: 8 } }}>
+              
+              {/* Filters Panel Header */}
+              <Box sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: 2.5,
+                mb: 4
+              }}>
+                {/* Category Pills Navigation */}
+                <Box sx={{
                   display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
                   flexWrap: 'wrap',
-                  gap: '16px',
-                  marginBottom: '32px'
+                  gap: 1,
+                  overflowX: 'auto',
+                  pb: 0.5
                 }}>
-                  {/* Category Pills Navigation */}
-                  <div style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '8px',
-                    overflowX: 'auto',
-                    paddingBottom: '4px'
-                  }}>
-                    {categories.map(cat => {
-                      // Calculate active counts dynamically
-                      const currentCount = cat.id === 'all' 
-                        ? profiles.length 
-                        : profiles.filter(p => p.category === cat.id).length;
+                  {categories.map(cat => {
+                    const currentCount = cat.id === 'all' 
+                      ? profiles.length 
+                      : profiles.filter(p => p.category === cat.id).length;
 
-                      const isActive = filters.category === cat.id;
+                    const isActive = filters.category === cat.id;
 
-                      return (
-                        <button
-                          key={cat.id}
-                          onClick={() => handleCategorySelect(cat.id)}
-                          className={`btn btn-sm ${isActive ? 'btn-primary' : 'btn-secondary'}`}
-                          style={{
-                            borderRadius: 'var(--radius-full)',
-                            padding: '8px 18px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                            border: isActive ? '1px solid transparent' : '1px solid var(--border-color)',
-                            fontSize: '13px'
-                          }}
-                        >
-                          <span>{cat.name}</span>
-                          <span style={{
-                            backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : 'var(--bg-surface-hover)',
-                            color: isActive ? '#fff' : 'var(--text-muted)',
-                            padding: '2px 6px',
-                            borderRadius: '10px',
-                            fontSize: '10px',
-                            fontWeight: 'bold'
-                          }}>
-                            {currentCount}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
+                    return (
+                      <Button
+                        key={cat.id}
+                        onClick={() => handleCategorySelect(cat.id)}
+                        variant={isActive ? "contained" : "outlined"}
+                        color={isActive ? "primary" : "inherit"}
+                        size="small"
+                        sx={{
+                          borderRadius: '9999px',
+                          px: 2.2,
+                          py: 0.8,
+                          fontSize: '13px',
+                          borderColor: isActive ? 'transparent' : theme.palette.divider,
+                          background: isActive ? 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)' : undefined,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 1,
+                          boxShadow: isActive ? '0 0 10px rgba(99, 102, 241, 0.25)' : 'none'
+                        }}
+                      >
+                        <span>{cat.name}</span>
+                        <Box sx={{
+                          backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : theme.palette.action.hover,
+                          color: isActive ? '#fff' : theme.palette.text.secondary,
+                          px: 1,
+                          py: 0.2,
+                          borderRadius: 2.5,
+                          fontSize: '10px',
+                          fontWeight: 'bold'
+                        }}>
+                          {currentCount}
+                        </Box>
+                      </Button>
+                    );
+                  })}
+                </Box>
 
-                  {/* Dropdown Filters (Experience) */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <Filter size={16} style={{ color: 'var(--text-light)' }} />
-                    <select
+                {/* Dropdown Filters (Experience) */}
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <FilterIcon sx={{ color: theme.palette.text.light, fontSize: 18 }} />
+                  <FormControl size="small" sx={{ minWidth: 200 }}>
+                    <Select
                       value={filters.experience}
                       onChange={handleExperienceChange}
-                      style={{
-                        padding: '8px 32px 8px 16px',
-                        borderRadius: 'var(--radius-sm)',
-                        width: '200px',
-                        fontSize: '13px',
-                        cursor: 'pointer'
-                      }}
+                      displayEmpty
                     >
                       {experienceOptions.map(opt => (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        <MenuItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </MenuItem>
                       ))}
-                    </select>
-                  </div>
-                </div>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
 
-                {/* Directory Count Title */}
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '20px'
-                }}>
-                  <span style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: 500 }}>
-                    Showing <strong>{filteredProfiles.length}</strong> matching candidate profiles
-                  </span>
-                  {(filters.search || filters.category !== 'all' || filters.location || filters.experience !== 'all') && (
-                    <button 
-                      onClick={resetAllFilters} 
-                      style={{
-                        background: 'transparent',
-                        border: 'none',
-                        color: 'var(--primary)',
-                        fontSize: '12px',
-                        fontWeight: 'bold',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      Clear Filters
-                    </button>
-                  )}
-                </div>
+              {/* Directory Count Title */}
+              <Box sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                mb: 3
+              }}>
+                <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontWeight: 500 }}>
+                  Showing <strong>{filteredProfiles.length}</strong> matching candidate profiles
+                </Typography>
+                
+                {hasActiveFilters && (
+                  <Button 
+                    onClick={resetAllFilters} 
+                    variant="text" 
+                    size="small"
+                    sx={{ fontWeight: 'bold', fontSize: '12px' }}
+                  >
+                    Clear Filters
+                  </Button>
+                )}
+              </Box>
 
-                {/* Job Seekers Grid */}
-                <AnimatePresence mode="popLayout">
-                  {filteredProfiles.length === 0 ? (
-                    <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="glass"
-                      style={{
-                        padding: '60px 20px',
-                        borderRadius: 'var(--radius-md)',
-                        textAlign: 'center',
-                        color: 'var(--text-muted)'
-                      }}
-                    >
-                      <Filter size={48} style={{ color: 'var(--text-light)', marginBottom: '16px' }} />
-                      <h4 style={{ fontSize: '20px', color: 'var(--text-main)', marginBottom: '8px' }}>
+              {/* Job Seekers Grid */}
+              <AnimatePresence mode="popLayout">
+                {filteredProfiles.length === 0 ? (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <Box sx={{
+                      background: theme.palette.background.glass,
+                      backdropFilter: 'blur(12px)',
+                      border: `1px solid ${theme.palette.divider}`,
+                      borderRadius: 3.5,
+                      py: 8,
+                      px: 3,
+                      textAlign: 'center',
+                      boxShadow: theme.shadows[1]
+                    }}>
+                      <SearchOffIcon sx={{ fontSize: 50, color: theme.palette.text.light, mb: 2 }} />
+                      <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, mb: 1 }}>
                         No Matches Found
-                      </h4>
-                      <p style={{ maxWidth: '460px', margin: '0 auto 20px auto', fontSize: '14px' }}>
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: theme.palette.text.secondary, maxWidth: 450, mx: 'auto', mb: 3 }}>
                         We couldn't find any job or creative profiles matching your current filters. 
-                        Try adjusting your keywords, selecting a different category, or resetting your search.
-                      </p>
-                      <button onClick={resetAllFilters} className="btn btn-primary btn-sm">
+                        Try adjusting your keywords or resetting your search.
+                      </Typography>
+                      <Button onClick={resetAllFilters} variant="contained" size="small">
                         Reset All Filters
-                      </button>
-                    </motion.div>
-                  ) : (
-                    <motion.div 
-                      layout
-                      className="grid-cols-dynamic"
-                    >
-                      {filteredProfiles.map(profile => (
-                        <JobCard key={profile.id} profile={profile} />
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      </Button>
+                    </Box>
+                  </motion.div>
+                ) : (
+                  <Grid container spacing={3}>
+                    {filteredProfiles.map(profile => (
+                      <Grid item xs={12} sm={6} lg={4} key={profile.id}>
+                        <JobCard profile={profile} />
+                      </Grid>
+                    ))}
+                  </Grid>
+                )}
+              </AnimatePresence>
 
-              </div>
-            </section>
+            </Container>
           </>
         )}
-      </main>
+      </Box>
 
-      {/* Footer banner */}
-      <footer className="glass" style={{
-        borderTop: '1px solid var(--border-color)',
-        padding: '40px 0',
-        backgroundColor: 'rgba(15, 22, 36, 0.4)',
-        fontSize: '13px',
-        color: 'var(--text-muted)',
-        textAlign: 'center'
-      }}>
-        <div className="container">
-          <div style={{
+      {/* Footer */}
+      <Box 
+        component="footer" 
+        sx={{
+          borderTop: `1px solid ${theme.palette.divider}`,
+          py: 5,
+          backgroundColor: theme.palette.mode === 'dark' ? 'rgba(15, 22, 36, 0.4)' : 'rgba(0,0,0,0.01)',
+          fontSize: '13px',
+          color: theme.palette.text.secondary
+        }}
+      >
+        <Container maxWidth="lg">
+          <Box sx={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             flexWrap: 'wrap',
-            gap: '16px',
-            marginBottom: '20px'
+            gap: 2,
+            mb: 3
           }}>
-            <div style={{ textAlign: 'left' }}>
-              <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-main)', display: 'block' }}>
-                CareerMatch
-              </span>
-              <span>Matrimonial Matching for Professional Endeavors.</span>
-            </div>
-            <div style={{ display: 'flex', gap: '20px' }}>
-              <a href="#" onClick={(e) => { e.preventDefault(); resetAllFilters(); setShowDashboard(false); }}>Talent Registry</a>
-              <a href="#" onClick={(e) => { e.preventDefault(); setShowDashboard(true); }}>Favorites Portal</a>
-              <a href="#" onClick={(e) => { e.preventDefault(); setIsRegisterOpen(true); }}>Register Seeker</a>
-            </div>
-          </div>
-          <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '20px', fontSize: '11px', color: 'var(--text-light)' }}>
-            © {new Date().getFullYear()} CareerMatch Inc. All rights reserved. Registered candidates details are protected. Logged-in verification required for contact discovery.
-          </div>
-        </div>
-      </footer>
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1 }}>
+                SkillMate
+              </Typography>
+              <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
+                Matrimonial Matching for Professional Endeavors.
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', gap: 3 }}>
+              <Link href="#" onClick={(e) => { e.preventDefault(); resetAllFilters(); setShowDashboard(false); }} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: theme.palette.primary.main } }}>Talent Registry</Link>
+              <Link href="#" onClick={(e) => { e.preventDefault(); setShowDashboard(true); }} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: theme.palette.primary.main } }}>Favorites Portal</Link>
+              <Link href="#" onClick={(e) => { e.preventDefault(); setIsRegisterOpen(true); }} sx={{ color: 'inherit', textDecoration: 'none', '&:hover': { color: theme.palette.primary.main } }}>Register Seeker</Link>
+            </Box>
+          </Box>
+          <Divider sx={{ mb: 3 }} />
+          <Typography variant="caption" sx={{ display: 'block', textAlign: 'center', color: theme.palette.text.light, fontSize: '11px' }}>
+            © {new Date().getFullYear()} SkillMate Inc. All rights reserved. Registered candidates details are protected. Logged-in verification required for contact discovery.
+          </Typography>
+        </Container>
+      </Box>
 
       {/* TRANSACTION OVERLAY MODALS */}
       <LoginModal 
@@ -311,7 +337,19 @@ function App() {
         }}
       />
 
-    </div>
+    </Box>
+  );
+}
+
+function App() {
+  const { isDarkMode } = useContext(AppContext);
+  const theme = getAppTheme(isDarkMode ? 'dark' : 'light');
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AppContent />
+    </ThemeProvider>
   );
 }
 

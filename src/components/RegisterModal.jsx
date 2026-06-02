@@ -1,11 +1,42 @@
 import React, { useState, useContext } from 'react';
 import { AppContext } from '../context/AppContext';
-import { X, User, Phone, Lock, Briefcase, GraduationCap, MapPin, Award, Building, Sparkles, AlertCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Dialog, 
+  DialogTitle, 
+  DialogContent, 
+  TextField, 
+  Button, 
+  Box, 
+  IconButton, 
+  Alert, 
+  CircularProgress, 
+  Typography, 
+  Tabs, 
+  Tab, 
+  Grid, 
+  Select, 
+  MenuItem, 
+  InputLabel, 
+  FormControl,
+  Link,
+  useTheme,
+  InputAdornment
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import PersonIcon from '@mui/icons-material/Person';
+import PhoneIcon from '@mui/icons-material/Phone';
+import LockIcon from '@mui/icons-material/Lock';
+import BuildingIcon from '@mui/icons-material/Business';
+import MapPinIcon from '@mui/icons-material/Place';
+import AwardIcon from '@mui/icons-material/WorkspacePremium';
+import GraduationIcon from '@mui/icons-material/School';
+import SparklesIcon from '@mui/icons-material/AutoAwesome';
 
 export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   const { registerJobSeeker, registerEmployer } = useContext(AppContext);
-  const [activeTab, setActiveTab] = useState('seeker'); // seeker or employer
+  const theme = useTheme();
+  
+  const [activeTab, setActiveTab] = useState(0); // 0 = seeker, 1 = employer
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -31,13 +62,15 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   // Employer Specific Fields
   const [organization, setOrganization] = useState('');
 
-  if (!isOpen) return null;
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+    setError('');
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
-    // Common validations
     if (!name.trim() || !mobile.trim() || !password.trim()) {
       setError('Please fill in all required fields.');
       return;
@@ -47,7 +80,7 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
     setTimeout(() => {
       let result;
-      if (activeTab === 'seeker') {
+      if (activeTab === 0) {
         const seekerData = {
           name: name.trim(),
           mobile: mobile.trim(),
@@ -64,7 +97,7 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           bio: bio.trim() || 'No bio provided yet.',
           skills: skills.trim() ? skills.split(',').map(s => s.trim()).filter(Boolean) : ['General'],
           portfolioUrl: portfolioUrl.trim(),
-          image: null // Defaults to dynamic initials avatar
+          image: null
         };
         result = registerJobSeeker(seekerData);
       } else {
@@ -107,476 +140,436 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   };
 
   return (
-    <AnimatePresence>
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(5, 7, 12, 0.85)',
-        backdropFilter: 'blur(8px)',
-        zIndex: 100,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '20px'
-      }} onClick={onClose}>
-        
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 250 }}
-          className="glass"
-          style={{
-            width: '100%',
-            maxWidth: '650px',
-            borderRadius: 'var(--radius-md)',
-            boxShadow: 'var(--shadow-lg)',
-            border: '1px solid var(--border-color)',
-            overflow: 'hidden',
-            maxHeight: '90vh',
-            display: 'flex',
-            flexDirection: 'column',
-            position: 'relative'
+    <Dialog 
+      open={isOpen} 
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      sx={{
+        '& .MuiDialog-paper': {
+          maxHeight: '90vh',
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative'
+        }
+      }}
+    >
+      {/* Header banner */}
+      <Box sx={{
+        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%)',
+        pt: 4,
+        px: 3,
+        pb: 2,
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        textAlign: 'center',
+        position: 'relative'
+      }}>
+        <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, mb: 0.5 }}>
+          Create Match Account
+        </Typography>
+        <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+          Join SkillMate as a job candidate or searching employer.
+        </Typography>
+
+        {/* Close Button */}
+        <IconButton 
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            top: 16,
+            right: 16,
+            color: theme.palette.text.light
           }}
-          onClick={(e) => e.stopPropagation()}
         >
-          {/* Header */}
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1))',
-            padding: '28px 24px 16px 24px',
-            borderBottom: '1px solid var(--border-color)',
-            textAlign: 'center',
-            position: 'relative',
-            flexShrink: 0
-          }}>
-            <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-main)', marginBottom: '4px' }}>
-              Create Match Account
-            </h2>
-            <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-              Join CareerMatch as a job candidate or searching employer.
-            </p>
+          <CloseIcon sx={{ fontSize: 20 }} />
+        </IconButton>
+      </Box>
 
-            {/* Close Button */}
-            <button 
-              onClick={onClose}
-              style={{
-                position: 'absolute',
-                top: '16px',
-                right: '16px',
-                background: 'transparent',
-                border: 'none',
-                color: 'var(--text-light)',
-                cursor: 'pointer',
-                padding: '4px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              <X size={20} />
-            </button>
-          </div>
+      {/* Tabs */}
+      <Tabs 
+        value={activeTab} 
+        onChange={handleTabChange}
+        variant="fullWidth"
+        textColor={activeTab === 0 ? "primary" : "secondary"}
+        indicatorColor={activeTab === 0 ? "primary" : "secondary"}
+        sx={{
+          borderBottom: `1px solid ${theme.palette.divider}`,
+          backgroundColor: theme.palette.mode === 'dark' ? 'rgba(15, 22, 36, 0.2)' : 'rgba(0,0,0,0.01)'
+        }}
+      >
+        <Tab label="Register as Talent" sx={{ fontWeight: 700, fontSize: '13px' }} />
+        <Tab label="Register as Recruiter" sx={{ fontWeight: 700, fontSize: '13px' }} />
+      </Tabs>
 
-          {/* Form Tabs Selector */}
-          <div style={{
-            display: 'flex',
-            borderBottom: '1px solid var(--border-color)',
-            backgroundColor: 'rgba(15, 22, 36, 0.2)',
-            flexShrink: 0
-          }}>
-            <button
-              onClick={() => { setActiveTab('seeker'); setError(''); }}
-              style={{
-                flex: 1,
-                padding: '14px',
-                background: 'transparent',
-                border: 'none',
-                borderBottom: activeTab === 'seeker' ? '3px solid var(--primary)' : '3px solid transparent',
-                color: activeTab === 'seeker' ? 'var(--primary)' : 'var(--text-muted)',
-                fontWeight: activeTab === 'seeker' ? 700 : 500,
-                fontSize: '14px',
-                cursor: 'pointer',
-                borderRadius: 0,
-                transition: 'all 0.2s'
-              }}
-            >
-              Register as Talent (Job Seeker)
-            </button>
-            <button
-              onClick={() => { setActiveTab('employer'); setError(''); }}
-              style={{
-                flex: 1,
-                padding: '14px',
-                background: 'transparent',
-                border: 'none',
-                borderBottom: activeTab === 'employer' ? '3px solid var(--secondary)' : '3px solid transparent',
-                color: activeTab === 'employer' ? 'var(--secondary)' : 'var(--text-muted)',
-                fontWeight: activeTab === 'employer' ? 700 : 500,
-                fontSize: '14px',
-                cursor: 'pointer',
-                borderRadius: 0,
-                transition: 'all 0.2s'
-              }}
-            >
-              Register as Recruiter (Employer)
-            </button>
-          </div>
+      {/* Form Content */}
+      <DialogContent sx={{ p: 3, overflowY: 'auto' }}>
+        <form onSubmit={handleSubmit} id="mui-register-form">
+          
+          {error && (
+            <Alert severity="error" sx={{ mb: 2.5, borderRadius: 2 }}>
+              {error}
+            </Alert>
+          )}
 
-          {/* Scrolling form content */}
-          <div style={{ padding: '24px', overflowY: 'auto', flexGrow: 1 }}>
-            {error && (
-              <div style={{
-                backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                borderRadius: 'var(--radius-sm)',
-                padding: '12px',
-                marginBottom: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                color: '#ef4444',
-                fontSize: '13px'
-              }}>
-                <AlertCircle size={18} style={{ flexShrink: 0 }} />
-                <span>{error}</span>
-              </div>
+          <Grid container spacing={2.5}>
+            {/* Name */}
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                Full Name *
+              </Typography>
+              <TextField
+                fullWidth
+                placeholder="John Doe"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PersonIcon sx={{ fontSize: 16, color: theme.palette.text.light }} />
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+
+            {/* Mobile */}
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                Mobile (Log In ID) *
+              </Typography>
+              <TextField
+                fullWidth
+                placeholder="+1 (555) 000-0000"
+                value={mobile}
+                onChange={(e) => setMobile(e.target.value)}
+                required
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PhoneIcon sx={{ fontSize: 16, color: theme.palette.text.light }} />
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+
+            {/* Password */}
+            <Grid item xs={12} sm={activeTab === 0 ? 12 : 6}>
+              <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                Password *
+              </Typography>
+              <TextField
+                fullWidth
+                type="password"
+                placeholder="Min 6 characters"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockIcon sx={{ fontSize: 16, color: theme.palette.text.light }} />
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+
+            {/* RECRUITER SPECIFIC FIELD: Organization */}
+            {activeTab === 1 && (
+              <Grid item xs={12} sm={6}>
+                <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                  Company Name *
+                </Typography>
+                <TextField
+                  fullWidth
+                  placeholder="Google, TechCorp, Self..."
+                  value={organization}
+                  onChange={(e) => setOrganization(e.target.value)}
+                  required
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <BuildingIcon sx={{ fontSize: 16, color: theme.palette.text.light }} />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Grid>
             )}
 
-            <form onSubmit={handleSubmit} id="register-form">
-              {/* Form Grid Layout */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr',
-                gap: '16px 24px'
-              }} className="register-grid">
-                
-                {/* Name */}
-                <div>
-                  <label htmlFor="reg-name">Full Name <span style={{ color: 'var(--secondary)' }}>*</span></label>
-                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <User size={16} style={{ position: 'absolute', left: '14px', color: 'var(--text-light)' }} />
-                    <input 
-                      id="reg-name"
-                      type="text" 
-                      placeholder="John Doe" 
-                      value={name} 
-                      onChange={(e) => setName(e.target.value)}
-                      style={{ paddingLeft: '40px' }}
-                      required
-                    />
-                  </div>
-                </div>
+            {/* SEEKER SPECIFIC FIELDS */}
+            {activeTab === 0 && (
+              <>
+                {/* Age & Gender */}
+                <Grid item xs={6}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                    Age *
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    type="number"
+                    placeholder="25"
+                    value={age}
+                    onChange={(e) => setAge(e.target.value)}
+                    required
+                    inputProps={{ min: 18, max: 99 }}
+                  />
+                </Grid>
 
-                {/* Mobile Number */}
-                <div>
-                  <label htmlFor="reg-mobile">Mobile Number (Log In ID) <span style={{ color: 'var(--secondary)' }}>*</span></label>
-                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <Phone size={16} style={{ position: 'absolute', left: '14px', color: 'var(--text-light)' }} />
-                    <input 
-                      id="reg-mobile"
-                      type="tel" 
-                      placeholder="+1 (555) 000-0000" 
-                      value={mobile} 
-                      onChange={(e) => setMobile(e.target.value)}
-                      style={{ paddingLeft: '40px' }}
-                      required
-                    />
-                  </div>
-                </div>
+                <Grid item xs={6}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                    Gender *
+                  </Typography>
+                  <FormControl fullWidth>
+                    <Select
+                      value={gender}
+                      onChange={(e) => setGender(e.target.value)}
+                    >
+                      <MenuItem value="Female">Female</MenuItem>
+                      <MenuItem value="Male">Male</MenuItem>
+                      <MenuItem value="Other">Other</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
 
-                {/* Password */}
-                <div>
-                  <label htmlFor="reg-password">Password <span style={{ color: 'var(--secondary)' }}>*</span></label>
-                  <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                    <Lock size={16} style={{ position: 'absolute', left: '14px', color: 'var(--text-light)' }} />
-                    <input 
-                      id="reg-password"
-                      type="password" 
-                      placeholder="Min 6 characters" 
-                      value={password} 
-                      onChange={(e) => setPassword(e.target.value)}
-                      style={{ paddingLeft: '40px' }}
-                      required
-                    />
-                  </div>
-                </div>
+                {/* Job Role */}
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                    Target Job Role *
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    placeholder="Software Architect, Chef..."
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <PersonIcon sx={{ fontSize: 16, color: theme.palette.text.light }} />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
 
-                {/* EMPLOYER SPECIAL FIELD: Organization */}
-                {activeTab === 'employer' && (
-                  <div>
-                    <label htmlFor="reg-org">Company / Organization <span style={{ color: 'var(--secondary)' }}>*</span></label>
-                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                      <Building size={16} style={{ position: 'absolute', left: '14px', color: 'var(--text-light)' }} />
-                      <input 
-                        id="reg-org"
-                        type="text" 
-                        placeholder="Google, TechCorp, Freelance Recruiter..." 
-                        value={organization} 
-                        onChange={(e) => setOrganization(e.target.value)}
-                        style={{ paddingLeft: '40px' }}
-                        required={activeTab === 'employer'}
-                      />
-                    </div>
-                  </div>
-                )}
+                {/* Category Selection */}
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                    Job Category *
+                  </Typography>
+                  <FormControl fullWidth>
+                    <Select
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                    >
+                      <MenuItem value="corporate">Corporate & Management</MenuItem>
+                      <MenuItem value="creative">Creative & Arts</MenuItem>
+                      <MenuItem value="technical">Technical & Software</MenuItem>
+                      <MenuItem value="trades">Skilled Trades & Services</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
 
-                {/* SEEKER SPECIAL FIELDS */}
-                {activeTab === 'seeker' && (
-                  <>
-                    {/* Age and Gender */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                      <div>
-                        <label htmlFor="reg-age">Age <span style={{ color: 'var(--secondary)' }}>*</span></label>
-                        <input 
-                          id="reg-age"
-                          type="number" 
-                          placeholder="25" 
-                          min="18"
-                          max="99"
-                          value={age} 
-                          onChange={(e) => setAge(e.target.value)}
-                          required={activeTab === 'seeker'}
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="reg-gender">Gender</label>
-                        <select 
-                          id="reg-gender" 
-                          value={gender} 
-                          onChange={(e) => setGender(e.target.value)}
-                        >
-                          <option value="Female">Female</option>
-                          <option value="Male">Male</option>
-                          <option value="Other">Other</option>
-                        </select>
-                      </div>
-                    </div>
+                {/* Subcategory */}
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                    Specialization
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    placeholder="UI/UX Design, Pastry Arts..."
+                    value={subcategory}
+                    onChange={(e) => setSubcategory(e.target.value)}
+                  />
+                </Grid>
 
-                    {/* Job Title / Role */}
-                    <div>
-                      <label htmlFor="reg-role">Target Job Role <span style={{ color: 'var(--secondary)' }}>*</span></label>
-                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                        <Briefcase size={16} style={{ position: 'absolute', left: '14px', color: 'var(--text-light)' }} />
-                        <input 
-                          id="reg-role"
-                          type="text" 
-                          placeholder="Software Architect, Wedding Photographer..." 
-                          value={role} 
-                          onChange={(e) => setRole(e.target.value)}
-                          style={{ paddingLeft: '40px' }}
-                          required={activeTab === 'seeker'}
-                        />
-                      </div>
-                    </div>
+                {/* Experience & Salary */}
+                <Grid item xs={6} sm={3}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                    Exp (Yrs) *
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    type="number"
+                    placeholder="5"
+                    value={experience}
+                    onChange={(e) => setExperience(e.target.value)}
+                    required
+                    inputProps={{ min: 0 }}
+                  />
+                </Grid>
 
-                    {/* Category Selector */}
-                    <div>
-                      <label htmlFor="reg-cat">Job Category</label>
-                      <select 
-                        id="reg-cat" 
-                        value={category} 
-                        onChange={(e) => setCategory(e.target.value)}
-                      >
-                        <option value="corporate">Corporate & Management</option>
-                        <option value="creative">Creative & Arts</option>
-                        <option value="technical">Technical & Software</option>
-                        <option value="trades">Skilled Trades & Services</option>
-                      </select>
-                    </div>
+                <Grid item xs={6} sm={3}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                    Expected Salary *
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    placeholder="e.g. $80k/yr or $40/hr"
+                    value={salary}
+                    onChange={(e) => setSalary(e.target.value)}
+                    required
+                  />
+                </Grid>
 
-                    {/* Subcategory */}
-                    <div>
-                      <label htmlFor="reg-subcat">Subcategory / Specialization</label>
-                      <input 
-                        id="reg-subcat"
-                        type="text" 
-                        placeholder="e.g. UI/UX Design, Pastry Arts, Mobile Dev" 
-                        value={subcategory} 
-                        onChange={(e) => setSubcategory(e.target.value)}
-                      />
-                    </div>
+                {/* Location */}
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                    Location (City, State) *
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    placeholder="New York, NY"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <MapPinIcon sx={{ fontSize: 16, color: theme.palette.text.light }} />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
 
-                    {/* Experience and Salary */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                      <div>
-                        <label htmlFor="reg-exp">Experience (Years) <span style={{ color: 'var(--secondary)' }}>*</span></label>
-                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                          <Award size={16} style={{ position: 'absolute', left: '14px', color: 'var(--text-light)' }} />
-                          <input 
-                            id="reg-exp"
-                            type="number" 
-                            placeholder="5" 
-                            min="0"
-                            value={experience} 
-                            onChange={(e) => setExperience(e.target.value)}
-                            style={{ paddingLeft: '40px' }}
-                            required={activeTab === 'seeker'}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label htmlFor="reg-salary">Expected Salary / Rates <span style={{ color: 'var(--secondary)' }}>*</span></label>
-                        <input 
-                          id="reg-salary"
-                          type="text" 
-                          placeholder="e.g. $90,000 / yr or $45 / hr" 
-                          value={salary} 
-                          onChange={(e) => setSalary(e.target.value)}
-                          required={activeTab === 'seeker'}
-                        />
-                      </div>
-                    </div>
+                {/* Education */}
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                    Education Details *
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    placeholder="BFA, ArtCenter or Self-taught..."
+                    value={education}
+                    onChange={(e) => setEducation(e.target.value)}
+                    required
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <GraduationIcon sx={{ fontSize: 16, color: theme.palette.text.light }} />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
 
-                    {/* Location */}
-                    <div>
-                      <label htmlFor="reg-loc">Location (City, State) <span style={{ color: 'var(--secondary)' }}>*</span></label>
-                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                        <MapPin size={16} style={{ position: 'absolute', left: '14px', color: 'var(--text-light)' }} />
-                        <input 
-                          id="reg-loc"
-                          type="text" 
-                          placeholder="New York, NY" 
-                          value={location} 
-                          onChange={(e) => setLocation(e.target.value)}
-                          style={{ paddingLeft: '40px' }}
-                          required={activeTab === 'seeker'}
-                        />
-                      </div>
-                    </div>
+                {/* Skills */}
+                <Grid item xs={12}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                    Skills (Comma Separated) *
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    placeholder="Figma, React, Node, SQL..."
+                    value={skills}
+                    onChange={(e) => setSkills(e.target.value)}
+                    required
+                  />
+                </Grid>
 
-                    {/* Education */}
-                    <div>
-                      <label htmlFor="reg-edu">Education Details <span style={{ color: 'var(--secondary)' }}>*</span></label>
-                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                        <GraduationCap size={16} style={{ position: 'absolute', left: '14px', color: 'var(--text-light)' }} />
-                        <input 
-                          id="reg-edu"
-                          type="text" 
-                          placeholder="BFA, ArtCenter or Self-taught Specialist" 
-                          value={education} 
-                          onChange={(e) => setEducation(e.target.value)}
-                          style={{ paddingLeft: '40px' }}
-                          required={activeTab === 'seeker'}
-                        />
-                      </div>
-                    </div>
+                {/* Portfolio URL */}
+                <Grid item xs={12}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                    Portfolio / Website Link
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    type="url"
+                    placeholder="https://example.com"
+                    value={portfolioUrl}
+                    onChange={(e) => setPortfolioUrl(e.target.value)}
+                  />
+                </Grid>
 
-                    {/* Skills */}
-                    <div>
-                      <label htmlFor="reg-skills">Skills (Comma Separated) <span style={{ color: 'var(--secondary)' }}>*</span></label>
-                      <input 
-                        id="reg-skills"
-                        type="text" 
-                        placeholder="Figma, Adobe XD, HTML, CSS, React" 
-                        value={skills} 
-                        onChange={(e) => setSkills(e.target.value)}
-                        required={activeTab === 'seeker'}
-                      />
-                    </div>
+                {/* Bio */}
+                <Grid item xs={12}>
+                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.8, color: theme.palette.text.primary, fontSize: '13px' }}>
+                    Professional Bio *
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={3}
+                    placeholder="Tell recruiters about your expertise or services..."
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    required
+                  />
+                </Grid>
+              </>
+            )}
 
-                    {/* Portfolio URL */}
-                    <div>
-                      <label htmlFor="reg-portfolio">Portfolio / LinkedIn Link</label>
-                      <input 
-                        id="reg-portfolio"
-                        type="url" 
-                        placeholder="https://example.com" 
-                        value={portfolioUrl} 
-                        onChange={(e) => setPortfolioUrl(e.target.value)}
-                      />
-                    </div>
+          </Grid>
+        </form>
+      </DialogContent>
 
-                    {/* Bio */}
-                    <div style={{ gridColumn: 'span 1' }}>
-                      <label htmlFor="reg-bio">Professional Bio <span style={{ color: 'var(--secondary)' }}>*</span></label>
-                      <textarea 
-                        id="reg-bio"
-                        placeholder="Tell recruiters about your expertise, creative background, or services..." 
-                        rows="3"
-                        value={bio} 
-                        onChange={(e) => setBio(e.target.value)}
-                        style={{ width: '100%', resize: 'vertical' }}
-                        required={activeTab === 'seeker'}
-                      />
-                    </div>
-                  </>
-                )}
+      {/* Dialog Actions Footer */}
+      <Box sx={{
+        p: 3,
+        borderTop: `1px solid ${theme.palette.divider}`,
+        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(15, 22, 36, 0.4)' : 'rgba(0,0,0,0.01)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 1.5
+      }}>
+        <Button 
+          fullWidth
+          type="submit" 
+          form="mui-register-form"
+          variant="contained" 
+          color={activeTab === 0 ? "primary" : "secondary"}
+          disabled={loading}
+          sx={{
+            py: 1.5,
+            fontSize: '15px',
+            fontWeight: 'bold',
+            borderRadius: 2,
+            background: activeTab === 0 
+              ? 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)' 
+              : 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)',
+            '&:hover': {
+              background: activeTab === 0 
+                ? 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)' 
+                : 'linear-gradient(135deg, #db2777 0%, #c2185b 100%)',
+            }
+          }}
+        >
+          {loading ? (
+            <CircularProgress size={20} color="inherit" />
+          ) : (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <SparklesIcon sx={{ fontSize: 16 }} />
+              <span>Register & Match Now</span>
+            </Box>
+          )}
+        </Button>
 
-              </div>
-            </form>
-          </div>
-
-          {/* Sticky footer actions */}
-          <div style={{
-            padding: '16px 24px',
-            borderTop: '1px solid var(--border-color)',
-            backgroundColor: 'rgba(15, 22, 36, 0.4)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px',
-            flexShrink: 0
-          }}>
-            <button 
-              type="submit" 
-              form="register-form"
-              className={`btn ${activeTab === 'employer' ? 'btn-accent' : 'btn-primary'}`}
-              disabled={loading}
-              style={{
-                width: '100%',
-                justifyContent: 'center',
-                padding: '14px',
-                fontSize: '15px'
+        <Box sx={{ textAlign: 'center' }}>
+          <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+            Already registered?{' '}
+            <Link 
+              href="#" 
+              onClick={(e) => {
+                e.preventDefault();
+                onSwitchToLogin();
+              }}
+              sx={{ 
+                fontWeight: 'bold', 
+                color: theme.palette.primary.main, 
+                textDecoration: 'none',
+                '&:hover': { textDecoration: 'underline' }
               }}
             >
-              {loading ? (
-                <div style={{
-                  width: '20px',
-                  height: '20px',
-                  border: '2.5px solid rgba(255,255,255,0.3)',
-                  borderTopColor: '#ffffff',
-                  borderRadius: '50%',
-                  animation: 'spin 0.8s linear infinite'
-                }} />
-              ) : (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Sparkles size={16} />
-                  <span>Register & Match Now</span>
-                </div>
-              )}
-            </button>
+              Log In Here
+            </Link>
+          </Typography>
+        </Box>
+      </Box>
 
-            <div style={{ textAlign: 'center', fontSize: '13px', color: 'var(--text-muted)' }}>
-              Already registered?{' '}
-              <a 
-                href="#" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  onSwitchToLogin();
-                }}
-                style={{ fontWeight: 'bold' }}
-              >
-                Log In Here
-              </a>
-            </div>
-          </div>
-
-        </motion.div>
-      </div>
-
-      <style>{`
-        @media (min-width: 580px) {
-          .register-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-          .register-grid > div:last-child {
-            grid-column: span 2 !important;
-          }
-        }
-      `}</style>
-    </AnimatePresence>
+    </Dialog>
   );
 };

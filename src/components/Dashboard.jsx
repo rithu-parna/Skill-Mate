@@ -1,6 +1,35 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../context/AppContext';
-import { Heart, Phone, ShieldAlert, Eye, User, Lock, Award, Briefcase, GraduationCap, MapPin, ExternalLink, Calendar, Users, Building, Trash2 } from 'lucide-react';
+import { 
+  Box, 
+  Typography, 
+  Grid, 
+  Button, 
+  Tabs, 
+  Tab, 
+  Avatar, 
+  Chip, 
+  Divider, 
+  List, 
+  ListItem, 
+  ListItemAvatar, 
+  ListItemText, 
+  IconButton,
+  Card,
+  CardContent,
+  useTheme
+} from '@mui/material';
+import HeartIcon from '@mui/icons-material/Favorite';
+import PhoneIcon from '@mui/icons-material/Phone';
+import PersonIcon from '@mui/icons-material/Person';
+import EyeIcon from '@mui/icons-material/Visibility';
+import AwardIcon from '@mui/icons-material/WorkspacePremium';
+import BuildingIcon from '@mui/icons-material/Business';
+import PlaceIcon from '@mui/icons-material/Place';
+import SchoolIcon from '@mui/icons-material/School';
+import MailIcon from '@mui/icons-material/Mail';
+import LaunchIcon from '@mui/icons-material/OpenInNew';
+import SparklesIcon from '@mui/icons-material/AutoAwesome';
 import { JobCard } from './JobCard';
 import { motion } from 'framer-motion';
 
@@ -10,11 +39,13 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
     profiles, 
     favorites, 
     unlockedContacts,
-    setSelectedProfileId,
-    toggleFavorite 
+    setSelectedProfileId 
   } = useContext(AppContext);
 
-  const [activeTab, setActiveTab] = useState('saved'); // saved, unlocked, myprofile, views
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+
+  const [activeTab, setActiveTab] = useState('saved');
   const [unlockLogs, setUnlockLogs] = useState([]);
 
   // Load unlock logs
@@ -22,7 +53,6 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
     const logs = JSON.parse(localStorage.getItem('careermatch_unlock_logs') || '[]');
     setUnlockLogs(logs);
 
-    // Default tab settings
     if (currentUser) {
       if (currentUser.accountType === 'seeker') {
         setActiveTab('myprofile');
@@ -34,22 +64,16 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
     }
   }, [currentUser, unlockedContacts]);
 
-  // Filters for bookmarked profiles
   const bookmarkedProfiles = profiles.filter(p => favorites.includes(p.id));
-
-  // Filters for unlocked profiles
   const unlockedProfiles = profiles.filter(p => unlockedContacts.includes(p.id));
-
-  // Filter logs for who unlocked the logged-in candidate's profile
+  
   const myProfileViews = currentUser && currentUser.accountType === 'seeker'
     ? unlockLogs.filter(log => log.unlockedProfileId === currentUser.id)
     : [];
 
-  // Simulated recruiter views to seed the list if it's empty (making the UI look amazing)
   const getSeededViews = () => {
     if (!currentUser || currentUser.accountType !== 'seeker') return [];
     
-    // Seed initial mock view logs
     const seedViews = [
       {
         id: 'seed-1',
@@ -65,7 +89,6 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
       }
     ];
 
-    // Merge actual views with seed views
     const mappedActual = myProfileViews.map(v => ({
       id: v.id,
       unlockedBy: `${v.unlockedBy} (Verified Recruiter)`,
@@ -77,391 +100,446 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
   };
 
   const seededViews = getSeededViews();
-
-  // Find current user's profile if seeker
   const myProfile = currentUser && currentUser.accountType === 'seeker'
     ? profiles.find(p => p.id === currentUser.id)
     : null;
 
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
   return (
-    <div className="container" style={{ padding: '40px 24px', minHeight: '80vh' }}>
+    <Box sx={{ py: 6, px: { xs: 2, sm: 3 } }}>
       
-      {/* Dashboard Welcome Header */}
-      <div className="glass" style={{
-        padding: '30px',
-        borderRadius: 'var(--radius-md)',
-        marginBottom: '30px',
-        border: '1px solid var(--border-color)',
-        background: 'linear-gradient(135deg, rgba(15, 22, 36, 0.9), rgba(99, 102, 241, 0.05))',
+      {/* Dashboard Top welcome banner */}
+      <Box sx={{
+        p: 4,
+        borderRadius: 3.5,
+        mb: 4,
+        border: `1px solid ${theme.palette.divider}`,
+        background: isDark 
+          ? 'linear-gradient(135deg, rgba(15, 22, 36, 0.95), rgba(99, 102, 241, 0.05))' 
+          : 'linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(99, 102, 241, 0.03))',
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: '20px'
+        gap: 3,
+        boxShadow: theme.shadows[2]
       }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary)', marginBottom: '8px' }}>
-            <Award size={18} />
-            <span style={{ fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: theme.palette.primary.main, mb: 1 }}>
+            <AwardIcon sx={{ fontSize: 18 }} />
+            <Typography variant="caption" sx={{ fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               User Workspace
-            </span>
-          </div>
-          <h2 style={{ fontSize: '28px', fontWeight: 800, color: 'var(--text-main)', marginBottom: '6px' }}>
-            {currentUser 
-              ? `Hello, ${currentUser.name}!` 
-              : 'Guest Dashboard'}
-          </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: 0 }}>
+            </Typography>
+          </Box>
+          <Typography variant="h4" sx={{ fontWeight: 800, color: theme.palette.text.primary, mb: 1, fontSize: { xs: '24px', sm: '30px' } }}>
+            {currentUser ? `Hello, ${currentUser.name}!` : 'Guest Workspace'}
+          </Typography>
+          <Typography variant="body2" sx={{ color: theme.palette.text.secondary, maxWidth: '600px' }}>
             {currentUser 
               ? (currentUser.accountType === 'employer' 
-                  ? `Recruiting for ${currentUser.organization || 'Independent Recruitment'}. Manage matches and unlocked contacts.`
-                  : `Role: ${currentUser.role || 'Job Seeker'}. Track who unlocks your contact card.`)
-              : 'Log in to unlock custom workspaces, track connections, and configure job matrimony parameters.'}
-          </p>
-        </div>
+                  ? `Recruiting for ${currentUser.organization || 'Independent Recruitment'}. Track favorited talents and unlocked contact parameters.`
+                  : `Role: ${currentUser.role || 'Job Seeker'}. Review your matching parameters and discover who viewed your profile.`)
+              : 'Log in to unlock custom dashboards, view match scores, and track professional matrimony connections.'}
+          </Typography>
+        </Box>
 
         {!currentUser && (
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <button onClick={onOpenLogin} className="btn btn-secondary btn-sm">Log In</button>
-            <button onClick={onOpenRegister} className="btn btn-primary btn-sm">Register</button>
-          </div>
+          <Box sx={{ display: 'flex', gap: 1.5 }}>
+            <Button variant="outlined" onClick={onOpenLogin} size="small">Log In</Button>
+            <Button variant="contained" onClick={onOpenRegister} size="small" sx={{ background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)' }}>Register</Button>
+          </Box>
         )}
-      </div>
+      </Box>
 
       {/* Main Grid Panel */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '30px' }} className="dashboard-grid">
+      <Grid container spacing={4}>
         
-        {/* Navigation Sidebar/Tabs */}
-        <div style={{ flexShrink: 0 }}>
-          <div className="glass" style={{
-            padding: '8px',
-            borderRadius: 'var(--radius-md)',
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '4px',
-            border: '1px solid var(--border-color)'
+        {/* Navigation Sidebar Tabs */}
+        <Grid item xs={12} md={3.5} lg={3}>
+          <Box sx={{
+            background: theme.palette.background.glass,
+            border: `1px solid ${theme.palette.divider}`,
+            borderRadius: 3,
+            p: 1.5,
+            boxShadow: theme.shadows[1]
           }}>
-            {/* 1. Favorites Tab (Available to all) */}
-            <button
-              onClick={() => setActiveTab('saved')}
-              className={`btn btn-sm ${activeTab === 'saved' ? 'btn-primary' : 'btn-secondary'}`}
-              style={{ flexGrow: 1, border: 'none' }}
+            <Tabs
+              orientation="vertical"
+              value={activeTab}
+              onChange={handleTabChange}
+              sx={{
+                '& .MuiTabs-indicator': {
+                  left: 0,
+                  right: 'auto',
+                  width: '3px',
+                  backgroundColor: theme.palette.primary.main
+                },
+                '& .MuiTab-root': {
+                  alignItems: 'flex-start',
+                  textAlign: 'left',
+                  py: 1.5,
+                  px: 2,
+                  borderRadius: 1.5,
+                  fontSize: '14px',
+                  fontWeight: 700,
+                  color: theme.palette.text.secondary,
+                  '&.Mui-selected': {
+                    color: theme.palette.primary.main,
+                    backgroundColor: theme.palette.primary.light
+                  }
+                }
+              }}
             >
-              <Heart size={14} fill={activeTab === 'saved' ? '#fff' : 'transparent'} />
-              <span>Bookmarked ({favorites.length})</span>
-            </button>
+              <Tab 
+                value="saved" 
+                label={
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <HeartIcon sx={{ fontSize: 18 }} />
+                    <span>Saved Matches ({favorites.length})</span>
+                  </Box>
+                } 
+              />
+              
+              {currentUser && currentUser.accountType === 'employer' && (
+                <Tab 
+                  value="unlocked" 
+                  label={
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                      <PhoneIcon sx={{ fontSize: 18 }} />
+                      <span>Unlocked Contacts ({unlockedContacts.length})</span>
+                    </Box>
+                  } 
+                />
+              )}
 
-            {/* 2. Recruiter Special: Unlocked Contacts Tab */}
-            {currentUser && currentUser.accountType === 'employer' && (
-              <button
-                onClick={() => setActiveTab('unlocked')}
-                className={`btn btn-sm ${activeTab === 'unlocked' ? 'btn-primary' : 'btn-secondary'}`}
-                style={{ flexGrow: 1, border: 'none' }}
-              >
-                <Phone size={14} />
-                <span>Unlocked Contacts ({unlockedContacts.length})</span>
-              </button>
-            )}
+              {currentUser && currentUser.accountType === 'seeker' && [
+                <Tab 
+                  key="myprofile"
+                  value="myprofile" 
+                  label={
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                      <PersonIcon sx={{ fontSize: 18 }} />
+                      <span>My Profile Details</span>
+                    </Box>
+                  } 
+                />,
+                <Tab 
+                  key="views"
+                  value="views" 
+                  label={
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                      <EyeIcon sx={{ fontSize: 18 }} />
+                      <span>Who Viewed Me ({seededViews.length})</span>
+                    </Box>
+                  } 
+                />
+              ]}
+            </Tabs>
+          </Box>
+        </Grid>
 
-            {/* 3. Seeker Special: My Profile Tab */}
-            {currentUser && currentUser.accountType === 'seeker' && (
-              <>
-                <button
-                  onClick={() => setActiveTab('myprofile')}
-                  className={`btn btn-sm ${activeTab === 'myprofile' ? 'btn-primary' : 'btn-secondary'}`}
-                  style={{ flexGrow: 1, border: 'none' }}
-                >
-                  <User size={14} />
-                  <span>My Profile Details</span>
-                </button>
-
-                {/* 4. Seeker Special: Who Viewed Contact Tab */}
-                <button
-                  onClick={() => setActiveTab('views')}
-                  className={`btn btn-sm ${activeTab === 'views' ? 'btn-primary' : 'btn-secondary'}`}
-                  style={{ flexGrow: 1, border: 'none' }}
-                >
-                  <Eye size={14} />
-                  <span>Who Viewed Me ({seededViews.length})</span>
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Tab Content Panel */}
-        <div style={{ flexGrow: 1 }}>
+        {/* Tab Panel Content Display */}
+        <Grid item xs={12} md={8.5} lg={9}>
           
-          {/* TAB 1: BOOKMARKED PROFILES */}
+          {/* TAB 1: SAVED MATCHES */}
           {activeTab === 'saved' && (
-            <div>
-              <h3 style={{ fontSize: '20px', marginBottom: '20px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Heart size={18} style={{ color: 'var(--secondary)' }} />
-                Your Bookmarked Candidates
-              </h3>
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: 800, mb: 3, display: 'flex', alignItems: 'center', gap: 1.2, color: theme.palette.text.primary }}>
+                <HeartIcon sx={{ color: theme.palette.secondary.main }} />
+                Your Saved Matches
+              </Typography>
 
               {bookmarkedProfiles.length === 0 ? (
-                <div className="glass" style={{
-                  padding: '40px',
-                  borderRadius: 'var(--radius-sm)',
+                <Box sx={{
+                  p: 6,
                   textAlign: 'center',
-                  color: 'var(--text-muted)'
+                  border: `1px dashed ${theme.palette.divider}`,
+                  borderRadius: 3.5,
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.01)' : 'rgba(0, 0, 0, 0.01)'
                 }}>
-                  <Heart size={32} style={{ color: 'var(--text-light)', marginBottom: '12px' }} />
-                  <p>You haven't bookmarked any profiles yet.</p>
-                  <p style={{ fontSize: '13px', marginTop: '6px' }}>Go back to the registry page and click the heart icon on any card to save it here.</p>
-                </div>
+                  <HeartIcon sx={{ fontSize: 40, color: theme.palette.text.light, mb: 1.5 }} />
+                  <Typography variant="body1" sx={{ color: theme.palette.text.primary, mb: 0.5, fontWeight: 'bold' }}>No profiles bookmarked yet</Typography>
+                  <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>Browse the registry, select profiles and click the bookmark heart icon.</Typography>
+                </Box>
               ) : (
-                <div className="grid-cols-dynamic">
+                <Grid container spacing={3}>
                   {bookmarkedProfiles.map(profile => (
-                    <JobCard key={profile.id} profile={profile} />
+                    <Grid item xs={12} sm={6} lg={4} key={profile.id}>
+                      <JobCard profile={profile} />
+                    </Grid>
                   ))}
-                </div>
+                </Grid>
               )}
-            </div>
+            </Box>
           )}
 
-          {/* TAB 2: RECRUITER UNLOCKED CONTACTS */}
+          {/* TAB 2: UNLOCKED CONNECTIONS (RECRUITERS) */}
           {activeTab === 'unlocked' && currentUser && currentUser.accountType === 'employer' && (
-            <div>
-              <h3 style={{ fontSize: '20px', marginBottom: '20px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Phone size={18} style={{ color: 'var(--success)' }} />
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: 800, mb: 3, display: 'flex', alignItems: 'center', gap: 1.2, color: theme.palette.text.primary }}>
+                <PhoneIcon sx={{ color: theme.palette.success.main }} />
                 Unlocked Talent Directory
-              </h3>
+              </Typography>
 
               {unlockedProfiles.length === 0 ? (
-                <div className="glass" style={{
-                  padding: '40px',
-                  borderRadius: 'var(--radius-sm)',
+                <Box sx={{
+                  p: 6,
                   textAlign: 'center',
-                  color: 'var(--text-muted)'
+                  border: `1px dashed ${theme.palette.divider}`,
+                  borderRadius: 3.5,
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.01)' : 'rgba(0, 0, 0, 0.01)'
                 }}>
-                  <Lock size={32} style={{ color: 'var(--text-light)', marginBottom: '12px' }} />
-                  <p>No contact details unlocked yet.</p>
-                  <p style={{ fontSize: '13px', marginTop: '6px' }}>Browse job seeker cards, view details, and click "Unlock Contact Details".</p>
-                </div>
+                  <PhoneIcon sx={{ fontSize: 40, color: theme.palette.text.light, mb: 1.5 }} />
+                  <Typography variant="body1" sx={{ color: theme.palette.text.primary, mb: 0.5, fontWeight: 'bold' }}>No unlocked contact details yet</Typography>
+                  <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>View profile cards, open detailed dialogues and select "Unlock Contact Details".</Typography>
+                </Box>
               ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px' }}>
+                <Grid container spacing={2.5}>
                   {unlockedProfiles.map(profile => (
-                    <div 
-                      key={profile.id}
-                      className="glass"
-                      style={{
-                        padding: '20px',
-                        borderRadius: 'var(--radius-sm)',
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        gap: '16px',
-                        border: '1px solid var(--border-color)'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        {profile.image ? (
-                          <img 
-                            src={profile.image} 
-                            alt={profile.name} 
-                            style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover' }} 
-                          />
-                        ) : (
-                          <div style={{
-                            width: '48px',
-                            height: '48px',
-                            borderRadius: '50%',
-                            backgroundColor: 'var(--primary-light)',
-                            color: 'var(--primary)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontWeight: 'bold',
-                            fontSize: '15px'
-                          }}>
-                            {profile.name.charAt(0)}
-                          </div>
-                        )}
-                        <div>
-                          <h4 style={{ fontSize: '16px', color: 'var(--text-main)', margin: 0 }}>{profile.name}</h4>
-                          <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{profile.role} • {profile.location}</span>
-                        </div>
-                      </div>
+                    <Grid item xs={12} key={profile.id}>
+                      <Card sx={{ 
+                        border: `1px solid ${theme.palette.divider}`,
+                        boxShadow: theme.shadows[1],
+                        '&:hover': { transform: 'none', boxShadow: theme.shadows[2] } 
+                      }}>
+                        <CardContent sx={{ p: 2.5, '&:last-child': { pb: 2.5 } }}>
+                          <Grid container spacing={2} sx={{ alignItems: 'center' }}>
+                            {/* Left details */}
+                            <Grid item xs={12} sm={5} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                              {profile.image ? (
+                                <Avatar src={profile.image} sx={{ width: 48, height: 48 }} />
+                              ) : (
+                                <Avatar sx={{ 
+                                  width: 48, 
+                                  height: 48, 
+                                  background: 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)',
+                                  color: '#fff',
+                                  fontWeight: 'bold'
+                                }}>
+                                  {profile.name.charAt(0)}
+                                </Avatar>
+                              )}
+                              <Box sx={{ minWidth: 0 }}>
+                                <Typography variant="body1" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }} noWrap>
+                                  {profile.name}
+                                </Typography>
+                                <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
+                                  {profile.role} • {profile.location.split(',')[0]}
+                                </Typography>
+                              </Box>
+                            </Grid>
 
-                      {/* Contact Info revealed */}
-                      <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                          <span style={{ fontSize: '10px', color: 'var(--text-light)', fontWeight: 700 }}>MOBILE</span>
-                          <a href={`tel:${profile.mobile}`} style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--text-main)' }}>
-                            {profile.mobile}
-                          </a>
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                          <span style={{ fontSize: '10px', color: 'var(--text-light)', fontWeight: 700 }}>EMAIL</span>
-                          <a href={`mailto:${profile.email}`} style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--text-muted)' }}>
-                            {profile.email}
-                          </a>
-                        </div>
-                      </div>
+                            {/* Center contacts */}
+                            <Grid item xs={12} sm={5} sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: { xs: 1.5, sm: 3 } }}>
+                              <Box>
+                                <Typography variant="caption" sx={{ color: theme.palette.text.light, display: 'block', fontWeight: 700, textTransform: 'uppercase' }}>Mobile</Typography>
+                                <Typography 
+                                  component="a" 
+                                  href={`tel:${profile.mobile}`} 
+                                  sx={{ fontSize: '14px', fontWeight: 'bold', color: theme.palette.text.primary, textDecoration: 'none' }}
+                                >
+                                  {profile.mobile}
+                                </Typography>
+                              </Box>
+                              <Box>
+                                <Typography variant="caption" sx={{ color: theme.palette.text.light, display: 'block', fontWeight: 700, textTransform: 'uppercase' }}>Email</Typography>
+                                <Typography 
+                                  component="a" 
+                                  href={`mailto:${profile.email}`} 
+                                  sx={{ fontSize: '13px', fontWeight: 'bold', color: theme.palette.text.secondary, textDecoration: 'none' }}
+                                >
+                                  {profile.email}
+                                </Typography>
+                              </Box>
+                            </Grid>
 
-                      {/* Direct Click */}
-                      <button 
-                        onClick={() => setSelectedProfileId(profile.id)}
-                        className="btn btn-secondary btn-sm"
-                        style={{ padding: '6px 12px' }}
-                      >
-                        Open Details
-                      </button>
-                    </div>
+                            {/* Right action */}
+                            <Grid item xs={12} sm={2} sx={{ textAlign: { xs: 'left', sm: 'right' } }}>
+                              <Button
+                                size="small"
+                                variant="outlined"
+                                onClick={() => setSelectedProfileId(profile.id)}
+                              >
+                                View Details
+                              </Button>
+                            </Grid>
+                          </Grid>
+                        </CardContent>
+                      </Card>
+                    </Grid>
                   ))}
-                </div>
+                </Grid>
               )}
-            </div>
+            </Box>
           )}
 
-          {/* TAB 3: CANDIDATE MY PROFILE */}
+          {/* TAB 3: MY MATRIMONIAL SEEKER PROFILE (SEEKERS) */}
           {activeTab === 'myprofile' && currentUser && currentUser.accountType === 'seeker' && myProfile && (
-            <div>
-              <h3 style={{ fontSize: '20px', marginBottom: '20px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <User size={18} style={{ color: 'var(--primary)' }} />
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: 800, mb: 3, display: 'flex', alignItems: 'center', gap: 1.2, color: theme.palette.text.primary }}>
+                <PersonIcon sx={{ color: theme.palette.primary.main }} />
                 Your Job Matrimony Profile
-              </h3>
+              </Typography>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '24px' }}>
-                {/* Profile detail card */}
-                <div className="glass" style={{
-                  padding: '30px',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--border-color)'
-                }}>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'center', marginBottom: '24px' }}>
-                    <div style={{
-                      width: '80px',
-                      height: '80px',
-                      borderRadius: 'var(--radius-md)',
-                      backgroundColor: 'var(--primary)',
-                      color: '#fff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '28px',
-                      fontWeight: 800
-                    }}>
-                      {myProfile.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
-                    </div>
-                    <div>
-                      <h4 style={{ fontSize: '22px', color: 'var(--text-main)', margin: '0 0 4px 0' }}>{myProfile.name}</h4>
-                      <p style={{ color: 'var(--text-muted)', fontSize: '14px', margin: 0 }}>
-                        {myProfile.role} • <span style={{ textTransform: 'capitalize' }}>{myProfile.category}</span>
-                      </p>
-                    </div>
-                  </div>
+              <Card sx={{ 
+                border: `1px solid ${theme.palette.divider}`,
+                boxShadow: theme.shadows[2],
+                '&:hover': { transform: 'none', boxShadow: theme.shadows[3] }
+              }}>
+                <CardContent sx={{ p: 4 }}>
+                  {/* Top info */}
+                  <Box sx={{ display: 'flex', gap: 2.5, alignItems: 'center', mb: 4, flexWrap: 'wrap' }}>
+                    {myProfile.image ? (
+                      <Avatar src={myProfile.image} variant="rounded" sx={{ width: 80, height: 80 }} />
+                    ) : (
+                      <Avatar 
+                        variant="rounded" 
+                        sx={{ 
+                          width: 80, 
+                          height: 80, 
+                          background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
+                          color: '#fff',
+                          fontWeight: 800,
+                          fontSize: '28px' 
+                        }}
+                      >
+                        {myProfile.name.charAt(0)}
+                      </Avatar>
+                    )}
+                    <Box sx={{ minWidth: 0 }}>
+                      <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, mb: 0.5 }}>
+                        {myProfile.name}
+                      </Typography>
+                      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+                        <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontWeight: 500 }}>
+                          {myProfile.role}
+                        </Typography>
+                        <Chip label={myProfile.category} size="small" color="primary" sx={{ textTransform: 'capitalize', fontWeight: 'bold', height: '20px', fontSize: '10px' }} />
+                      </Box>
+                    </Box>
+                  </Box>
 
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                    gap: '20px',
-                    marginBottom: '24px'
-                  }}>
-                    <div>
-                      <span style={{ display: 'block', fontSize: '11px', color: 'var(--text-light)', fontWeight: 700, textTransform: 'uppercase' }}>Mobile (Verified Login)</span>
-                      <span style={{ fontSize: '15px', color: 'var(--text-main)', fontWeight: 'bold' }}>{myProfile.mobile}</span>
-                    </div>
-                    <div>
-                      <span style={{ display: 'block', fontSize: '11px', color: 'var(--text-light)', fontWeight: 700, textTransform: 'uppercase' }}>Email</span>
-                      <span style={{ fontSize: '15px', color: 'var(--text-main)', fontWeight: 'bold' }}>{myProfile.email || 'None'}</span>
-                    </div>
-                    <div>
-                      <span style={{ display: 'block', fontSize: '11px', color: 'var(--text-light)', fontWeight: 700, textTransform: 'uppercase' }}>Age & Gender</span>
-                      <span style={{ fontSize: '15px', color: 'var(--text-main)', fontWeight: 'bold' }}>{myProfile.age} Years old / {myProfile.gender}</span>
-                    </div>
-                    <div>
-                      <span style={{ display: 'block', fontSize: '11px', color: 'var(--text-light)', fontWeight: 700, textTransform: 'uppercase' }}>Experience</span>
-                      <span style={{ fontSize: '15px', color: 'var(--text-main)', fontWeight: 'bold' }}>{myProfile.experience} Years</span>
-                    </div>
-                    <div>
-                      <span style={{ display: 'block', fontSize: '11px', color: 'var(--text-light)', fontWeight: 700, textTransform: 'uppercase' }}>Expected Salary</span>
-                      <span style={{ fontSize: '15px', color: 'var(--text-main)', fontWeight: 'bold' }}>{myProfile.salary}</span>
-                    </div>
-                    <div>
-                      <span style={{ display: 'block', fontSize: '11px', color: 'var(--text-light)', fontWeight: 700, textTransform: 'uppercase' }}>Location</span>
-                      <span style={{ fontSize: '15px', color: 'var(--text-main)', fontWeight: 'bold' }}>{myProfile.location}</span>
-                    </div>
-                  </div>
+                  {/* Core details */}
+                  <Grid container spacing={3} sx={{ mb: 4 }}>
+                    <Grid item xs={12} sm={4}>
+                      <Typography variant="caption" sx={{ color: theme.palette.text.light, display: 'block', fontWeight: 700, textTransform: 'uppercase' }}>Mobile Login</Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, mt: 0.5 }}>{myProfile.mobile}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <Typography variant="caption" sx={{ color: theme.palette.text.light, display: 'block', fontWeight: 700, textTransform: 'uppercase' }}>Email</Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, mt: 0.5 }}>{myProfile.email}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <Typography variant="caption" sx={{ color: theme.palette.text.light, display: 'block', fontWeight: 700, textTransform: 'uppercase' }}>Age & Gender</Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, mt: 0.5 }}>{myProfile.age} Years / {myProfile.gender}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <Typography variant="caption" sx={{ color: theme.palette.text.light, display: 'block', fontWeight: 700, textTransform: 'uppercase' }}>Experience</Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, mt: 0.5 }}>{myProfile.experience} Years</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <Typography variant="caption" sx={{ color: theme.palette.text.light, display: 'block', fontWeight: 700, textTransform: 'uppercase' }}>Target Salary</Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, mt: 0.5 }}>{myProfile.salary}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <Typography variant="caption" sx={{ color: theme.palette.text.light, display: 'block', fontWeight: 700, textTransform: 'uppercase' }}>Location</Typography>
+                      <Typography variant="body1" sx={{ fontWeight: 'bold', color: theme.palette.text.primary, mt: 0.5 }}>{myProfile.location}</Typography>
+                    </Grid>
+                  </Grid>
 
-                  <div style={{ marginBottom: '20px' }}>
-                    <span style={{ display: 'block', fontSize: '11px', color: 'var(--text-light)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>Skills</span>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {/* Skills */}
+                  <Box sx={{ mb: 4 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: theme.palette.text.primary, mb: 1.5, borderBottom: `1px solid ${theme.palette.divider}`, pb: 0.5 }}>
+                      Registered Skills
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                       {myProfile.skills.map((skill, index) => (
-                        <span key={index} className="badge badge-primary">{skill}</span>
+                        <Chip key={index} label={skill} size="small" variant="outlined" />
                       ))}
-                    </div>
-                  </div>
+                    </Box>
+                  </Box>
 
-                  <div>
-                    <span style={{ display: 'block', fontSize: '11px', color: 'var(--text-light)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>Professional Biography</span>
-                    <p style={{ fontSize: '14px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.6 }}>{myProfile.bio}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+                  {/* Biography */}
+                  <Box>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: theme.palette.text.primary, mb: 1.5, borderBottom: `1px solid ${theme.palette.divider}`, pb: 0.5 }}>
+                      Professional Biography
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6 }}>
+                      {myProfile.bio}
+                    </Typography>
+                  </Box>
+
+                </CardContent>
+              </Card>
+            </Box>
           )}
 
-          {/* TAB 4: WHO VIEWED MY CONTACT */}
+          {/* TAB 4: WHO VIEWED ME (SEEKERS) */}
           {activeTab === 'views' && currentUser && currentUser.accountType === 'seeker' && (
-            <div>
-              <h3 style={{ fontSize: '20px', marginBottom: '6px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Eye size={18} style={{ color: 'var(--primary)' }} />
-                Who Unlocked Your Contact Details
-              </h3>
-              <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '20px' }}>
-                Matrimonial logs. These recruiters have unlocked your phone number and email to match you for jobs.
-              </p>
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, mb: 0.5 }}>
+                Who Unlocked Your Contact Parameters
+              </Typography>
+              <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 3.5 }}>
+                Matched connection history. These verified recruiters have unlocked your phone number to start matches.
+              </Typography>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <List sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {seededViews.map(view => (
-                  <div 
+                  <ListItem 
                     key={view.id}
-                    className="glass"
-                    style={{
-                      padding: '16px 20px',
-                      borderRadius: 'var(--radius-sm)',
-                      display: 'flex',
+                    sx={{
+                      p: 2.5,
+                      borderRadius: 2,
+                      border: `1px solid ${theme.palette.divider}`,
+                      borderLeft: `4px solid ${theme.palette.primary.main}`,
+                      backgroundColor: theme.palette.background.glass,
                       flexWrap: 'wrap',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      gap: '12px',
-                      border: '1px solid var(--border-color)',
-                      borderLeft: '4px solid var(--primary)'
+                      gap: 2,
+                      justifyContent: 'space-between'
                     }}
                   >
-                    <div>
-                      <h4 style={{ fontSize: '15px', color: 'var(--text-main)', margin: '0 0 2px 0' }}>{view.unlockedBy}</h4>
-                      <span style={{ fontSize: '12px', color: 'var(--text-light)' }}>
-                        Mobile Contact ID: <strong style={{ color: 'var(--text-muted)' }}>{view.unlockedByMobile}</strong>
-                      </span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontSize: '12px', color: 'var(--text-light)' }}>{view.timestamp}</span>
-                      <a href={`tel:${view.unlockedByMobile}`} className="btn btn-secondary btn-icon" style={{ padding: '6px' }} title="Call Recruiter Back">
-                        <Phone size={12} style={{ color: 'var(--success)' }} />
-                      </a>
-                    </div>
-                  </div>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                      <Avatar sx={{ backgroundColor: theme.palette.primary.light, color: theme.palette.primary.main }}>
+                        <BuildingIcon sx={{ fontSize: 20 }} />
+                      </Avatar>
+                      <Box>
+                        <Typography variant="body2" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
+                          {view.unlockedBy}
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
+                          Mobile: <strong>{view.unlockedByMobile}</strong>
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                      <Typography variant="caption" sx={{ color: theme.palette.text.light }}>
+                        {view.timestamp}
+                      </Typography>
+                      <IconButton 
+                        component="a"
+                        href={`tel:${view.unlockedByMobile}`}
+                        color="success"
+                        sx={{ border: `1px solid ${theme.palette.divider}`, p: 1 }}
+                        title="Call Back Recruiter"
+                      >
+                        <PhoneIcon sx={{ fontSize: 16 }} />
+                      </IconButton>
+                    </Box>
+
+                  </ListItem>
                 ))}
-              </div>
-            </div>
+              </List>
+            </Box>
           )}
 
-        </div>
+        </Grid>
 
-      </div>
-
-      <style>{`
-        @media (min-width: 992px) {
-          .dashboard-grid {
-            grid-template-columns: 260px 1fr !important;
-          }
-        }
-      `}</style>
-    </div>
+      </Grid>
+    </Box>
   );
 };
