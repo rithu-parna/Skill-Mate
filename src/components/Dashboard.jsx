@@ -1,19 +1,19 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../context/AppContext';
-import { 
-  Box, 
-  Typography, 
-  Grid, 
-  Button, 
-  Tabs, 
-  Tab, 
-  Avatar, 
-  Chip, 
-  Divider, 
-  List, 
-  ListItem, 
-  ListItemAvatar, 
-  ListItemText, 
+import {
+  Box,
+  Typography,
+  Grid,
+  Button,
+  Tabs,
+  Tab,
+  Avatar,
+  Chip,
+  Divider,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
   IconButton,
   Card,
   CardContent,
@@ -34,12 +34,12 @@ import { JobCard } from './JobCard';
 import { motion } from 'framer-motion';
 
 export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
-  const { 
-    currentUser, 
-    profiles, 
-    favorites, 
+  const {
+    currentUser,
+    profiles,
+    favorites,
     unlockedContacts,
-    setSelectedProfileId 
+    setSelectedProfileId
   } = useContext(AppContext);
 
   const theme = useTheme();
@@ -66,14 +66,14 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
 
   const bookmarkedProfiles = profiles.filter(p => favorites.includes(p.id));
   const unlockedProfiles = profiles.filter(p => unlockedContacts.includes(p.id));
-  
+
   const myProfileViews = currentUser && currentUser.accountType === 'seeker'
     ? unlockLogs.filter(log => log.unlockedProfileId === currentUser.id)
     : [];
 
   const getSeededViews = () => {
     if (!currentUser || currentUser.accountType !== 'seeker') return [];
-    
+
     const seedViews = [
       {
         id: 'seed-1',
@@ -110,15 +110,15 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
 
   return (
     <Box sx={{ py: 6, px: { xs: 2, sm: 3 } }}>
-      
+
       {/* Dashboard Top welcome banner */}
       <Box sx={{
         p: 4,
         borderRadius: 3.5,
         mb: 4,
         border: `1px solid ${theme.palette.divider}`,
-        background: isDark 
-          ? 'linear-gradient(135deg, rgba(15, 22, 36, 0.95), rgba(99, 102, 241, 0.05))' 
+        background: isDark
+          ? 'linear-gradient(135deg, rgba(15, 22, 36, 0.95), rgba(99, 102, 241, 0.05))'
           : 'linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(99, 102, 241, 0.03))',
         display: 'flex',
         flexWrap: 'wrap',
@@ -138,10 +138,10 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
             {currentUser ? `Hello, ${currentUser.name}!` : 'Guest Workspace'}
           </Typography>
           <Typography variant="body2" sx={{ color: theme.palette.text.secondary, maxWidth: '600px' }}>
-            {currentUser 
-              ? (currentUser.accountType === 'employer' 
-                  ? `Recruiting for ${currentUser.organization || 'Independent Recruitment'}. Track favorited talents and unlocked contact parameters.`
-                  : `Role: ${currentUser.role || 'Job Seeker'}. Review your matching parameters and discover who viewed your profile.`)
+            {currentUser
+              ? (currentUser.accountType === 'employer'
+                ? `Recruiting for ${currentUser.organization || 'Independent Recruitment'}. Track favorited talents and unlocked contact parameters.`
+                : `Role: ${currentUser.role || 'Job Seeker'}. Review your matching parameters and discover who viewed your profile.`)
               : 'Log in to unlock custom dashboards, view match scores, and track professional matrimony connections.'}
           </Typography>
         </Box>
@@ -156,7 +156,7 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
 
       {/* Main Grid Panel */}
       <Grid container spacing={4}>
-        
+
         {/* Navigation Sidebar Tabs */}
         <Grid item xs={12} md={3.5} lg={3}>
           <Box sx={{
@@ -193,48 +193,48 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
                 }
               }}
             >
-              <Tab 
-                value="saved" 
+              <Tab
+                value="saved"
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                     <HeartIcon sx={{ fontSize: 18 }} />
                     <span>Saved Matches ({favorites.length})</span>
                   </Box>
-                } 
+                }
               />
-              
+
               {currentUser && currentUser.accountType === 'employer' && (
-                <Tab 
-                  value="unlocked" 
+                <Tab
+                  value="unlocked"
                   label={
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                       <PhoneIcon sx={{ fontSize: 18 }} />
                       <span>Unlocked Contacts ({unlockedContacts.length})</span>
                     </Box>
-                  } 
+                  }
                 />
               )}
 
               {currentUser && currentUser.accountType === 'seeker' && [
-                <Tab 
+                <Tab
                   key="myprofile"
-                  value="myprofile" 
+                  value="myprofile"
                   label={
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                       <PersonIcon sx={{ fontSize: 18 }} />
                       <span>My Profile Details</span>
                     </Box>
-                  } 
+                  }
                 />,
-                <Tab 
+                <Tab
                   key="views"
-                  value="views" 
+                  value="views"
                   label={
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                       <EyeIcon sx={{ fontSize: 18 }} />
                       <span>Who Viewed Me ({seededViews.length})</span>
                     </Box>
-                  } 
+                  }
                 />
               ]}
             </Tabs>
@@ -243,7 +243,7 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
 
         {/* Tab Panel Content Display */}
         <Grid item xs={12} md={8.5} lg={9}>
-          
+
           {/* TAB 1: SAVED MATCHES */}
           {activeTab === 'saved' && (
             <Box>
@@ -267,7 +267,7 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
               ) : (
                 <Grid container spacing={3}>
                   {bookmarkedProfiles.map(profile => (
-                    <Grid item xs={12} sm={6} lg={4} key={profile.id}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }} key={profile.id}>
                       <JobCard profile={profile} />
                     </Grid>
                   ))}
@@ -300,10 +300,10 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
                 <Grid container spacing={2.5}>
                   {unlockedProfiles.map(profile => (
                     <Grid item xs={12} key={profile.id}>
-                      <Card sx={{ 
+                      <Card sx={{
                         border: `1px solid ${theme.palette.divider}`,
                         boxShadow: theme.shadows[1],
-                        '&:hover': { transform: 'none', boxShadow: theme.shadows[2] } 
+                        '&:hover': { transform: 'none', boxShadow: theme.shadows[2] }
                       }}>
                         <CardContent sx={{ p: 2.5, '&:last-child': { pb: 2.5 } }}>
                           <Grid container spacing={2} sx={{ alignItems: 'center' }}>
@@ -312,9 +312,9 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
                               {profile.image ? (
                                 <Avatar src={profile.image} sx={{ width: 48, height: 48 }} />
                               ) : (
-                                <Avatar sx={{ 
-                                  width: 48, 
-                                  height: 48, 
+                                <Avatar sx={{
+                                  width: 48,
+                                  height: 48,
                                   background: 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)',
                                   color: '#fff',
                                   fontWeight: 'bold'
@@ -336,9 +336,9 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
                             <Grid item xs={12} sm={5} sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: { xs: 1.5, sm: 3 } }}>
                               <Box>
                                 <Typography variant="caption" sx={{ color: theme.palette.text.light, display: 'block', fontWeight: 700, textTransform: 'uppercase' }}>Mobile</Typography>
-                                <Typography 
-                                  component="a" 
-                                  href={`tel:${profile.mobile}`} 
+                                <Typography
+                                  component="a"
+                                  href={`tel:${profile.mobile}`}
                                   sx={{ fontSize: '14px', fontWeight: 'bold', color: theme.palette.text.primary, textDecoration: 'none' }}
                                 >
                                   {profile.mobile}
@@ -346,9 +346,9 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
                               </Box>
                               <Box>
                                 <Typography variant="caption" sx={{ color: theme.palette.text.light, display: 'block', fontWeight: 700, textTransform: 'uppercase' }}>Email</Typography>
-                                <Typography 
-                                  component="a" 
-                                  href={`mailto:${profile.email}`} 
+                                <Typography
+                                  component="a"
+                                  href={`mailto:${profile.email}`}
                                   sx={{ fontSize: '13px', fontWeight: 'bold', color: theme.palette.text.secondary, textDecoration: 'none' }}
                                 >
                                   {profile.email}
@@ -384,7 +384,7 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
                 Your Job Matrimony Profile
               </Typography>
 
-              <Card sx={{ 
+              <Card sx={{
                 border: `1px solid ${theme.palette.divider}`,
                 boxShadow: theme.shadows[2],
                 '&:hover': { transform: 'none', boxShadow: theme.shadows[3] }
@@ -395,15 +395,15 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
                     {myProfile.image ? (
                       <Avatar src={myProfile.image} variant="rounded" sx={{ width: 80, height: 80 }} />
                     ) : (
-                      <Avatar 
-                        variant="rounded" 
-                        sx={{ 
-                          width: 80, 
-                          height: 80, 
+                      <Avatar
+                        variant="rounded"
+                        sx={{
+                          width: 80,
+                          height: 80,
                           background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
                           color: '#fff',
                           fontWeight: 800,
-                          fontSize: '28px' 
+                          fontSize: '28px'
                         }}
                       >
                         {myProfile.name.charAt(0)}
@@ -489,7 +489,7 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
 
               <List sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {seededViews.map(view => (
-                  <ListItem 
+                  <ListItem
                     key={view.id}
                     sx={{
                       p: 2.5,
@@ -520,7 +520,7 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
                       <Typography variant="caption" sx={{ color: theme.palette.text.light }}>
                         {view.timestamp}
                       </Typography>
-                      <IconButton 
+                      <IconButton
                         component="a"
                         href={`tel:${view.unlockedByMobile}`}
                         color="success"
