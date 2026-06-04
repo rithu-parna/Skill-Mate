@@ -20,9 +20,12 @@ import {
   FormControl,
   Link,
   useTheme,
-  InputAdornment
+  InputAdornment,
+  Divider
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import AppleIcon from '@mui/icons-material/Apple';
+import GoogleIcon from '@mui/icons-material/Google';
 import PersonIcon from '@mui/icons-material/Person';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LockIcon from '@mui/icons-material/Lock';
@@ -37,6 +40,7 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   const theme = useTheme();
   
   const [activeTab, setActiveTab] = useState(0); // 0 = seeker, 1 = employer
+  const [step, setStep] = useState(0); // 0 = role selection, 1 = form
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -137,6 +141,11 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     setPortfolioUrl('');
     setOrganization('');
     setError('');
+    setStep(0);
+  };
+
+  const handleNextStep = () => {
+    setStep(1);
   };
 
   return (
@@ -150,59 +159,171 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           maxHeight: '90vh',
           display: 'flex',
           flexDirection: 'column',
-          position: 'relative'
+          position: 'relative',
+          borderRadius: 4
         }
       }}
     >
-      {/* Header banner */}
-      <Box sx={{
-        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%)',
-        pt: 4,
-        px: 3,
-        pb: 2,
-        borderBottom: `1px solid ${theme.palette.divider}`,
-        textAlign: 'center',
-        position: 'relative'
-      }}>
-        <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, mb: 0.5 }}>
-          Create Match Account
-        </Typography>
-        <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
-          Join SkillMate as a job candidate or searching employer.
-        </Typography>
+      {step === 0 ? (
+        <Box sx={{ p: { xs: 3, md: 5 }, textAlign: 'center', backgroundColor: theme.palette.background.paper }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+            <IconButton onClick={onClose} sx={{ color: theme.palette.text.light }}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <Typography variant="h4" sx={{ fontWeight: 800, color: theme.palette.text.primary, mb: 1.5, fontSize: { xs: '24px', md: '32px' } }}>
+            Welcome to SkillMate
+          </Typography>
+          <Typography variant="body1" sx={{ color: theme.palette.text.secondary, mb: 4 }}>
+            Which describes you best?
+          </Typography>
 
-        {/* Close Button */}
-        <IconButton 
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            top: 16,
-            right: 16,
-            color: theme.palette.text.light
-          }}
-        >
-          <CloseIcon sx={{ fontSize: 20 }} />
-        </IconButton>
-      </Box>
+          <Grid container spacing={3} sx={{ maxWidth: 500, mx: 'auto', mb: 5 }}>
+            <Grid item xs={12} sm={6}>
+              <Box
+                onClick={() => setActiveTab(1)}
+                sx={{
+                  border: `2px solid ${activeTab === 1 ? theme.palette.primary.main : theme.palette.divider}`,
+                  borderRadius: 3,
+                  p: 3,
+                  cursor: 'pointer',
+                  backgroundColor: activeTab === 1 
+                    ? (theme.palette.mode === 'dark' ? 'rgba(20, 168, 0, 0.15)' : '#f2fdf2') 
+                    : 'transparent',
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    borderColor: theme.palette.primary.main,
+                    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(20, 168, 0, 0.05)' : '#fafafa'
+                  }
+                }}
+              >
+                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+                  <BuildingIcon sx={{ fontSize: 40, color: theme.palette.text.primary }} />
+                </Box>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: theme.palette.text.primary, mb: 1, fontSize: '18px' }}>
+                  Client
+                </Typography>
+                <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+                  Find and hire talent
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Box
+                onClick={() => setActiveTab(0)}
+                sx={{
+                  border: `2px solid ${activeTab === 0 ? theme.palette.primary.main : theme.palette.divider}`,
+                  borderRadius: 3,
+                  p: 3,
+                  cursor: 'pointer',
+                  backgroundColor: activeTab === 0 
+                    ? (theme.palette.mode === 'dark' ? 'rgba(20, 168, 0, 0.15)' : '#f2fdf2') 
+                    : 'transparent',
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    borderColor: theme.palette.primary.main,
+                    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(20, 168, 0, 0.05)' : '#fafafa'
+                  }
+                }}
+              >
+                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+                  <PersonIcon sx={{ fontSize: 40, color: theme.palette.text.primary }} />
+                </Box>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: theme.palette.text.primary, mb: 1, fontSize: '18px' }}>
+                  Freelancer
+                </Typography>
+                <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+                  Work and get paid
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
 
-      {/* Tabs */}
-      <Tabs 
-        value={activeTab} 
-        onChange={handleTabChange}
-        variant="fullWidth"
-        textColor={activeTab === 0 ? "primary" : "secondary"}
-        indicatorColor={activeTab === 0 ? "primary" : "secondary"}
-        sx={{
-          borderBottom: `1px solid ${theme.palette.divider}`,
-          backgroundColor: theme.palette.mode === 'dark' ? 'rgba(15, 22, 36, 0.2)' : 'rgba(0,0,0,0.01)'
-        }}
-      >
-        <Tab label="Register as Talent" sx={{ fontWeight: 700, fontSize: '13px' }} />
-        <Tab label="Register as Recruiter" sx={{ fontWeight: 700, fontSize: '13px' }} />
-      </Tabs>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            onClick={handleNextStep}
+            sx={{ py: 1.5, px: 5, borderRadius: 2, fontWeight: 'bold', fontSize: '15px', mb: 3 }}
+          >
+            {activeTab === 0 ? 'Apply as a Freelancer' : 'Join as a Client'}
+          </Button>
+
+          <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+            Already have an account?{' '}
+            <Link 
+              href="#" 
+              onClick={(e) => { e.preventDefault(); onSwitchToLogin(); }}
+              sx={{ color: theme.palette.primary.main, fontWeight: 'bold', textDecoration: 'underline' }}
+            >
+              Log in
+            </Link>
+          </Typography>
+        </Box>
+      ) : (
+        <>
+          {/* Header banner */}
+          <Box sx={{
+            backgroundColor: theme.palette.background.default,
+            pt: 3,
+            px: 3,
+            pb: 2,
+            borderBottom: `1px solid ${theme.palette.divider}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}>
+            <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+              Sign up to find work you love
+            </Typography>
+
+            <IconButton onClick={onClose} sx={{ color: theme.palette.text.light }}>
+              <CloseIcon sx={{ fontSize: 20 }} />
+            </IconButton>
+          </Box>
+
+
 
       {/* Form Content */}
       <DialogContent sx={{ p: 3, overflowY: 'auto' }}>
+        
+        {/* Social Auth Buttons */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, mb: 3 }}>
+          <Button
+            variant="outlined"
+            fullWidth
+            startIcon={<AppleIcon />}
+            sx={{
+              color: theme.palette.mode === 'dark' ? '#fff' : '#000',
+              borderColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.8)',
+              borderRadius: '8px',
+              py: 1.2,
+              fontWeight: 'bold'
+            }}
+          >
+            Continue with Apple
+          </Button>
+          <Button
+            variant="contained"
+            fullWidth
+            startIcon={<GoogleIcon />}
+            sx={{
+              backgroundColor: '#1f57c3',
+              color: '#fff',
+              borderRadius: '8px',
+              py: 1.2,
+              fontWeight: 'bold',
+              '&:hover': { backgroundColor: '#1847a1' }
+            }}
+          >
+            Continue with Google
+          </Button>
+          <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
+            <Divider sx={{ flexGrow: 1 }} />
+            <Typography variant="body2" sx={{ px: 2, color: theme.palette.text.secondary }}>or</Typography>
+            <Divider sx={{ flexGrow: 1 }} />
+          </Box>
+        </Box>
+
         <form onSubmit={handleSubmit} id="mui-register-form">
           
           {error && (
@@ -521,29 +642,20 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           type="submit" 
           form="mui-register-form"
           variant="contained" 
-          color={activeTab === 0 ? "primary" : "secondary"}
+          color="primary"
           disabled={loading}
           sx={{
             py: 1.5,
             fontSize: '15px',
             fontWeight: 'bold',
             borderRadius: 2,
-            background: activeTab === 0 
-              ? 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)' 
-              : 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)',
-            '&:hover': {
-              background: activeTab === 0 
-                ? 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)' 
-                : 'linear-gradient(135deg, #db2777 0%, #c2185b 100%)',
-            }
           }}
         >
           {loading ? (
             <CircularProgress size={20} color="inherit" />
           ) : (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <SparklesIcon sx={{ fontSize: 16 }} />
-              <span>Register & Match Now</span>
+              <span>Create my account</span>
             </Box>
           )}
         </Button>
@@ -569,6 +681,8 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
           </Typography>
         </Box>
       </Box>
+      </>
+      )}
 
     </Dialog>
   );

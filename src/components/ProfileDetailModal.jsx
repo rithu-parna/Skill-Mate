@@ -81,11 +81,11 @@ export const ProfileDetailModal = ({ onOpenLogin }) => {
   // Helper for profile color gradient
   const getGradient = (name) => {
     const colors = [
-      'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
-      'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)',
-      'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
-      'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-      'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+      '#14a800',
+      '#1f57c3',
+      '#e0e0e0',
+      '#222222',
+      '#5e6d55',
     ];
     let sum = 0;
     for (let i = 0; i < name.length; i++) {
@@ -527,14 +527,11 @@ export const ProfileDetailModal = ({ onOpenLogin }) => {
                   onClick={handleUnlockClick}
                   variant="contained"
                   size="small"
-                  color="accent"
+                  color="primary"
                   startIcon={<LockIcon sx={{ fontSize: 13 }} />}
                   sx={{
-                    background: 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)',
-                    color: '#fff',
-                    '&:hover': {
-                      background: 'linear-gradient(135deg, #4f46e5 0%, #db2777 100%)',
-                    }
+                    px: 4,
+                    borderRadius: 2,
                   }}
                 >
                   {currentUser ? "Unlock Contact Details" : "Log In to Unlock"}

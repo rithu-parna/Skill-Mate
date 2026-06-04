@@ -158,7 +158,7 @@ function AppContent() {
                           py: 0.8,
                           fontSize: '13px',
                           borderColor: isActive ? 'transparent' : theme.palette.divider,
-                          background: isActive ? 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)' : undefined,
+                          backgroundColor: isActive ? theme.palette.primary.main : undefined,
                           display: 'flex',
                           alignItems: 'center',
                           gap: 1,

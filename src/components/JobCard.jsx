@@ -56,11 +56,11 @@ export const JobCard = ({ profile }) => {
   // Gradient generator
   const getGradient = (name) => {
     const colors = [
-      'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
-      'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)',
-      'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
-      'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-      'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+      '#14a800', // Green
+      '#1f57c3', // Blue
+      '#e0e0e0', // Grey
+      '#222222', // Dark
+      '#5e6d55', // Olive
     ];
     let sum = 0;
     for (let i = 0; i < name.length; i++) {
@@ -73,13 +73,13 @@ export const JobCard = ({ profile }) => {
   const getTopBarGradient = () => {
     switch(profile.category) {
       case 'creative':
-        return 'linear-gradient(90deg, #ec4899, #06b6d4)';
+        return '#1f57c3';
       case 'technical':
-        return 'linear-gradient(90deg, #06b6d4, #6366f1)';
+        return '#222222';
       case 'trades':
-        return 'linear-gradient(90deg, #22c55e, #06b6d4)';
+        return '#f59e0b';
       default:
-        return 'linear-gradient(90deg, #6366f1, #ec4899)';
+        return '#14a800';
     }
   };
 
@@ -331,10 +331,6 @@ export const JobCard = ({ profile }) => {
               py: '7px',
               px: '14px',
               borderRadius: 1.5,
-              background: !isUnlocked ? 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)' : undefined,
-              '&:hover': {
-                background: !isUnlocked ? 'linear-gradient(135deg, #4f46e5 0%, #db2777 100%)' : undefined,
-              }
             }}
           >
             {isUnlocked ? "Contact Unlocked" : "Show Contact"}

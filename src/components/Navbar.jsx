@@ -52,7 +52,7 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
           }}
         >
           <Box sx={{
-            background: 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)',
+            backgroundColor: theme.palette.primary.main,
             borderRadius: '12px',
             width: '40px',
             height: '40px',
@@ -60,7 +60,6 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
             alignItems: 'center',
             justifyContent: 'center',
             color: '#fff',
-            boxShadow: theme.shadows[1]
           }}>
             <WorkIcon sx={{ fontSize: 22 }} />
           </Box>
@@ -72,16 +71,14 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
                 fontSize: '20px', 
                 fontWeight: 800, 
                 lineHeight: 1.1,
-                background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
+                color: theme.palette.text.primary,
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px'
               }}
             >
               SkillMate
-              <AutoAwesomeIcon sx={{ color: theme.palette.secondary.main, fontSize: 14 }} />
+              <AutoAwesomeIcon sx={{ color: theme.palette.primary.main, fontSize: 14 }} />
             </Typography>
             <Typography 
               variant="caption" 
@@ -230,7 +227,6 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
                 startIcon={<PersonAddIcon sx={{ fontSize: 14 }} />}
                 sx={{ 
                   py: '6px',
-                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)'
                 }}
               >
                 Register

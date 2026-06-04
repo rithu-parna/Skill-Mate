@@ -7,72 +7,65 @@ export const getAppTheme = (mode) => {
     palette: {
       mode,
       primary: {
-        main: '#6366f1', // Indigo
-        light: 'rgba(99, 102, 241, 0.15)',
-        dark: '#4f46e5',
+        main: '#14a800', // Upwork Green
+        light: 'rgba(20, 168, 0, 0.15)',
+        dark: '#108a00',
         contrastText: '#ffffff',
       },
       secondary: {
-        main: '#ec4899', // Pink
-        light: 'rgba(236, 72, 153, 0.15)',
-        dark: '#db2777',
+        main: '#1f57c3', // Blue
+        light: 'rgba(31, 87, 195, 0.15)',
+        dark: '#1847a1',
         contrastText: '#ffffff',
       },
       accent: {
-        main: '#06b6d4', // Cyan
-        light: 'rgba(6, 182, 212, 0.15)',
-        dark: '#0891b2',
+        main: '#222222', // Dark accent
+        light: 'rgba(34, 34, 34, 0.15)',
+        dark: '#111111',
       },
       background: {
-        default: isDark ? '#080c14' : '#f6f8fc',
-        paper: isDark ? '#0f1624' : '#ffffff',
-        glass: isDark ? 'rgba(15, 22, 36, 0.75)' : 'rgba(255, 255, 255, 0.8)',
+        default: isDark ? '#1d1e20' : '#ffffff',
+        paper: isDark ? '#2b2d30' : '#ffffff',
+        glass: isDark ? 'rgba(43, 45, 48, 0.95)' : 'rgba(255, 255, 255, 0.95)',
       },
       text: {
-        primary: isDark ? '#f8fafc' : '#0f172a',
-        secondary: isDark ? '#94a3b8' : '#475569',
-        light: isDark ? '#64748b' : '#94a3b8',
+        primary: isDark ? '#ffffff' : '#222222',
+        secondary: isDark ? '#e0e0e0' : '#5e6d55',
+        light: isDark ? '#9e9e9e' : '#9aa09d',
       },
-      divider: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.08)',
+      divider: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(34, 34, 34, 0.12)',
       success: {
-        main: '#22c55e',
+        main: '#14a800',
       },
       warning: {
         main: '#f59e0b',
       },
     },
     typography: {
-      fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
+      fontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
       h1: {
-        fontFamily: "'Outfit', system-ui, sans-serif",
-        fontWeight: 800,
+        fontWeight: 700,
         letterSpacing: '-0.02em',
       },
       h2: {
-        fontFamily: "'Outfit', system-ui, sans-serif",
-        fontWeight: 800,
+        fontWeight: 700,
         letterSpacing: '-0.02em',
       },
       h3: {
-        fontFamily: "'Outfit', system-ui, sans-serif",
         fontWeight: 700,
         letterSpacing: '-0.01em',
       },
       h4: {
-        fontFamily: "'Outfit', system-ui, sans-serif",
         fontWeight: 700,
         letterSpacing: '-0.01em',
       },
       h5: {
-        fontFamily: "'Outfit', system-ui, sans-serif",
         fontWeight: 600,
       },
       h6: {
-        fontFamily: "'Outfit', system-ui, sans-serif",
         fontWeight: 600,
       },
       button: {
-        fontFamily: "'Outfit', system-ui, sans-serif",
         fontWeight: 600,
         textTransform: 'none',
       },
@@ -94,31 +87,31 @@ export const getAppTheme = (mode) => {
             borderRadius: 8,
             padding: '8px 20px',
             fontSize: '14px',
-            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: 'all 0.2s ease',
             boxShadow: 'none',
             '&:hover': {
               boxShadow: 'none',
-              transform: 'translateY(-1px)',
+              transform: 'translateY(0)',
             },
           },
           containedPrimary: {
             '&:hover': {
-              backgroundColor: '#4f46e5',
-              boxShadow: '0 0 16px rgba(99, 102, 241, 0.4)',
+              backgroundColor: '#108a00',
+              boxShadow: 'none',
             },
           },
           containedSecondary: {
             '&:hover': {
-              backgroundColor: '#db2777',
-              boxShadow: '0 0 16px rgba(236, 72, 153, 0.4)',
+              backgroundColor: '#1847a1',
+              boxShadow: 'none',
             },
           },
           outlined: {
-            borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.08)',
-            color: isDark ? '#f8fafc' : '#0f172a',
+            borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(34, 34, 34, 0.12)',
+            color: isDark ? '#ffffff' : '#222222',
             '&:hover': {
-              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(15, 23, 42, 0.04)',
-              borderColor: isDark ? '#94a3b8' : '#475569',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(34, 34, 34, 0.04)',
+              borderColor: isDark ? '#e0e0e0' : '#222222',
             },
           },
         },
@@ -126,18 +119,18 @@ export const getAppTheme = (mode) => {
       MuiCard: {
         styleOverrides: {
           root: {
-            background: isDark ? 'rgba(15, 22, 36, 0.75)' : 'rgba(255, 255, 255, 0.8)',
-            backdropFilter: 'blur(12px)',
-            border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.08)'}`,
+            background: isDark ? '#2b2d30' : '#ffffff',
+            backdropFilter: 'none',
+            border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(34, 34, 34, 0.12)'}`,
             borderRadius: 14,
-            boxShadow: isDark ? '0 8px 24px rgba(0, 0, 0, 0.6)' : '0 8px 24px rgba(15, 23, 42, 0.04)',
-            transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease',
+            boxShadow: isDark ? '0 4px 12px rgba(0, 0, 0, 0.3)' : '0 4px 12px rgba(0, 0, 0, 0.05)',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
             '&:hover': {
-              transform: 'translateY(-4px)',
-              borderColor: 'rgba(99, 102, 241, 0.3)',
+              transform: 'translateY(-2px)',
+              borderColor: 'rgba(20, 168, 0, 0.3)',
               boxShadow: isDark 
-                ? '0 16px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(99, 102, 241, 0.25)' 
-                : '0 16px 40px rgba(15, 23, 42, 0.08), 0 0 20px rgba(99, 102, 241, 0.15)',
+                ? '0 8px 24px rgba(0, 0, 0, 0.5)' 
+                : '0 8px 24px rgba(0, 0, 0, 0.08)',
             },
           },
         },
@@ -159,21 +152,21 @@ export const getAppTheme = (mode) => {
         styleOverrides: {
           root: {
             '& .MuiOutlinedInput-root': {
-              backgroundColor: isDark ? 'rgba(15, 22, 36, 0.5)' : 'rgba(255, 255, 255, 0.9)',
+              backgroundColor: isDark ? 'rgba(43, 45, 48, 0.5)' : '#ffffff',
               transition: 'border-color 0.2s, box-shadow 0.2s',
               borderRadius: 8,
               '& fieldset': {
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.08)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(34, 34, 34, 0.12)',
               },
               '&:hover fieldset': {
-                borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(15, 23, 42, 0.2)',
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(34, 34, 34, 0.25)',
               },
               '&.Mui-focused fieldset': {
-                borderColor: '#6366f1',
+                borderColor: '#14a800',
                 borderWidth: '1px',
               },
               '&.Mui-focused': {
-                boxShadow: '0 0 0 3px rgba(99, 102, 241, 0.15)',
+                boxShadow: 'none',
               },
             },
           },
@@ -185,16 +178,16 @@ export const getAppTheme = (mode) => {
         },
         styleOverrides: {
           root: {
-            backgroundColor: isDark ? 'rgba(15, 22, 36, 0.5)' : 'rgba(255, 255, 255, 0.9)',
+            backgroundColor: isDark ? 'rgba(43, 45, 48, 0.5)' : '#ffffff',
             borderRadius: 8,
             '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.08)',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(34, 34, 34, 0.12)',
             },
             '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(15, 23, 42, 0.2)',
+              borderColor: isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(34, 34, 34, 0.25)',
             },
             '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#6366f1',
+              borderColor: '#14a800',
               borderWidth: '1px',
             },
           },
@@ -203,10 +196,10 @@ export const getAppTheme = (mode) => {
       MuiDialog: {
         styleOverrides: {
           paper: {
-            background: isDark ? 'rgba(15, 22, 36, 0.85)' : 'rgba(255, 255, 255, 0.9)',
-            backdropFilter: 'blur(16px)',
-            border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.08)'}`,
-            boxShadow: isDark ? '0 16px 40px rgba(0, 0, 0, 0.8)' : '0 16px 40px rgba(15, 23, 42, 0.12)',
+            background: isDark ? '#2b2d30' : '#ffffff',
+            backdropFilter: 'none',
+            border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(34, 34, 34, 0.12)'}`,
+            boxShadow: isDark ? '0 16px 40px rgba(0, 0, 0, 0.6)' : '0 16px 40px rgba(0, 0, 0, 0.1)',
             borderRadius: 14,
           },
         },
