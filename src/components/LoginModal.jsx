@@ -13,9 +13,12 @@ import {
   Typography, 
   InputAdornment,
   Link,
-  useTheme
+  useTheme,
+  Divider
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import AppleIcon from '@mui/icons-material/Apple';
+import GoogleIcon from '@mui/icons-material/Google';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LockIcon from '@mui/icons-material/Lock';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -70,7 +73,7 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
     >
       {/* Banner Head */}
       <Box sx={{
-        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%)',
+        backgroundColor: theme.palette.background.default,
         pt: 4,
         px: 3,
         pb: 2.5,
@@ -104,6 +107,45 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
 
       {/* Form Content */}
       <DialogContent sx={{ p: 3, pt: 3.5 }}>
+        
+        {/* Social Auth Buttons */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, mb: 3 }}>
+          <Button
+            variant="outlined"
+            fullWidth
+            startIcon={<AppleIcon />}
+            sx={{
+              color: theme.palette.mode === 'dark' ? '#fff' : '#000',
+              borderColor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.8)',
+              borderRadius: '8px',
+              py: 1.2,
+              fontWeight: 'bold'
+            }}
+          >
+            Continue with Apple
+          </Button>
+          <Button
+            variant="contained"
+            fullWidth
+            startIcon={<GoogleIcon />}
+            sx={{
+              backgroundColor: '#1f57c3',
+              color: '#fff',
+              borderRadius: '8px',
+              py: 1.2,
+              fontWeight: 'bold',
+              '&:hover': { backgroundColor: '#1847a1' }
+            }}
+          >
+            Continue with Google
+          </Button>
+          <Box sx={{ display: 'flex', alignItems: 'center', my: 2 }}>
+            <Divider sx={{ flexGrow: 1 }} />
+            <Typography variant="body2" sx={{ px: 2, color: theme.palette.text.secondary }}>or</Typography>
+            <Divider sx={{ flexGrow: 1 }} />
+          </Box>
+        </Box>
+
         <form onSubmit={handleSubmit}>
           
           {error && (
@@ -196,10 +238,6 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
               fontWeight: 'bold',
               borderRadius: 2,
               mb: 2.5,
-              background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-              '&:hover': {
-                background: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)',
-              }
             }}
           >
             {loading ? <CircularProgress size={20} color="inherit" /> : 'Log In'}

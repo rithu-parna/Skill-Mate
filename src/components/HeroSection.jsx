@@ -41,26 +41,11 @@ export const HeroSection = () => {
     <Box sx={{
       position: 'relative',
       py: { xs: 8, md: 10 },
-      background: isDark 
-        ? 'radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%), radial-gradient(circle at 10% 80%, rgba(236, 72, 153, 0.08) 0%, transparent 50%)'
-        : 'radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 50%), radial-gradient(circle at 10% 80%, rgba(236, 72, 153, 0.04) 0%, transparent 50%)',
+      backgroundColor: theme.palette.background.default,
       borderBottom: `1px solid ${theme.palette.divider}`,
       overflow: 'hidden'
     }}>
-      {/* Decorative blurred background shapes */}
-      <Box sx={{
-        position: 'absolute',
-        top: '-150px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '600px',
-        height: '300px',
-        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(236, 72, 153, 0.15))',
-        filter: 'blur(100px)',
-        borderRadius: '50%',
-        pointerEvents: 'none',
-        zIndex: 0
-      }} />
+      {/* Removed decorative blurred background shapes */}
 
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
         
@@ -71,8 +56,8 @@ export const HeroSection = () => {
           gap: 1,
           px: 2,
           py: 0.8,
-          backgroundColor: isDark ? 'rgba(99, 102, 241, 0.1)' : 'rgba(99, 102, 241, 0.06)',
-          border: `1px solid ${isDark ? 'rgba(99, 102, 241, 0.3)' : 'rgba(99, 102, 241, 0.2)'}`,
+          backgroundColor: isDark ? 'rgba(20, 168, 0, 0.1)' : 'rgba(20, 168, 0, 0.06)',
+          border: `1px solid ${isDark ? 'rgba(20, 168, 0, 0.3)' : 'rgba(20, 168, 0, 0.2)'}`,
           borderRadius: 9999,
           mb: 3,
           color: theme.palette.primary.main,
@@ -100,17 +85,13 @@ export const HeroSection = () => {
         >
           Where Great{' '}
           <Box component="span" sx={{
-            background: 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
+            color: theme.palette.primary.main
           }}>
             Talents
           </Box>{' '}
           Meet the Perfect{' '}
           <Box component="span" sx={{
-            background: 'linear-gradient(135deg, #ec4899 0%, #06b6d4 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
+            color: theme.palette.primary.main
           }}>
             Opportunities
           </Box>
@@ -200,7 +181,6 @@ export const HeroSection = () => {
               px: 4,
               py: 1.5,
               borderRadius: 2,
-              background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
               whiteSpace: 'nowrap'
             }}
           >

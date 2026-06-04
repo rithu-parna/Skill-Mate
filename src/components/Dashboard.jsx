@@ -117,9 +117,7 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
         borderRadius: 3.5,
         mb: 4,
         border: `1px solid ${theme.palette.divider}`,
-        background: isDark
-          ? 'linear-gradient(135deg, rgba(15, 22, 36, 0.95), rgba(99, 102, 241, 0.05))'
-          : 'linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(99, 102, 241, 0.03))',
+        backgroundColor: isDark ? theme.palette.background.paper : theme.palette.background.default,
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'center',
@@ -149,7 +147,7 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
         {!currentUser && (
           <Box sx={{ display: 'flex', gap: 1.5 }}>
             <Button variant="outlined" onClick={onOpenLogin} size="small">Log In</Button>
-            <Button variant="contained" onClick={onOpenRegister} size="small" sx={{ background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)' }}>Register</Button>
+            <Button variant="contained" onClick={onOpenRegister} size="small" color="primary">Register</Button>
           </Box>
         )}
       </Box>
@@ -315,8 +313,7 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
                                 <Avatar sx={{
                                   width: 48,
                                   height: 48,
-                                  background: 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)',
-                                  color: '#fff',
+                                  backgroundColor: theme.palette.primary.main,
                                   fontWeight: 'bold'
                                 }}>
                                   {profile.name.charAt(0)}
@@ -400,7 +397,7 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
                         sx={{
                           width: 80,
                           height: 80,
-                          background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
+                          backgroundColor: theme.palette.primary.main,
                           color: '#fff',
                           fontWeight: 800,
                           fontSize: '28px'
