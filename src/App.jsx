@@ -27,6 +27,7 @@ import {
 } from '@mui/material';
 import FilterIcon from '@mui/icons-material/FilterAlt';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
+import GridViewIcon from '@mui/icons-material/GridView';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function AppContent() {
@@ -134,7 +135,7 @@ function AppContent() {
                 <Box sx={{
                   display: 'flex',
                   flexWrap: 'wrap',
-                  gap: 1,
+                  gap: 1.5,
                   overflowX: 'auto',
                   pb: 0.5
                 }}>
@@ -154,29 +155,45 @@ function AppContent() {
                         size="small"
                         sx={{
                           borderRadius: '9999px',
-                          px: 2.2,
-                          py: 0.8,
+                          px: 2.4,
+                          py: 0.9,
                           fontSize: '13px',
-                          borderColor: isActive ? 'transparent' : theme.palette.divider,
-                          backgroundColor: isActive ? theme.palette.primary.main : undefined,
+                          fontWeight: 600,
+                          textTransform: 'none',
+                          fontFamily: 'var(--font-display)',
+                          borderColor: isActive ? 'transparent' : (isDarkMode ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'),
+                          backgroundColor: isActive 
+                            ? theme.palette.primary.main 
+                            : (isDarkMode ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)'),
+                          color: isActive ? '#fff' : theme.palette.text.primary,
                           display: 'flex',
                           alignItems: 'center',
-                          gap: 1,
-                          boxShadow: isActive ? '0 0 10px rgba(99, 102, 241, 0.25)' : 'none'
+                          gap: 1.2,
+                          boxShadow: isActive ? '0 0 15px rgba(20, 168, 0, 0.25)' : 'none',
+                          '&:hover': {
+                            backgroundColor: isActive 
+                              ? theme.palette.primary.dark 
+                              : (isDarkMode ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)'),
+                            borderColor: isActive ? 'transparent' : (isDarkMode ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.15)'),
+                          }
                         }}
                       >
                         <span>{cat.name}</span>
-                        <Box sx={{
-                          backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : theme.palette.action.hover,
-                          color: isActive ? '#fff' : theme.palette.text.secondary,
-                          px: 1,
-                          py: 0.2,
-                          borderRadius: 2.5,
-                          fontSize: '10px',
-                          fontWeight: 'bold'
-                        }}>
-                          {currentCount}
-                        </Box>
+                        {cat.id === 'all' ? (
+                          <GridViewIcon sx={{ fontSize: 15, opacity: 0.8 }} />
+                        ) : (
+                          <Box sx={{
+                            backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : (isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)'),
+                            color: isActive ? '#fff' : theme.palette.text.secondary,
+                            px: 1,
+                            py: 0.1,
+                            borderRadius: '4px',
+                            fontSize: '10px',
+                            fontWeight: 700
+                          }}>
+                            {currentCount}
+                          </Box>
+                        )}
                       </Button>
                     );
                   })}
@@ -184,15 +201,33 @@ function AppContent() {
 
                 {/* Dropdown Filters (Experience) */}
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                  <FilterIcon sx={{ color: theme.palette.text.light, fontSize: 18 }} />
+                  <FilterIcon sx={{ color: theme.palette.text.light, fontSize: 16 }} />
                   <FormControl size="small" sx={{ minWidth: 200 }}>
                     <Select
                       value={filters.experience}
                       onChange={handleExperienceChange}
                       displayEmpty
+                      sx={{
+                        borderRadius: '8px',
+                        backgroundColor: isDarkMode ? 'rgba(15, 22, 36, 0.4)' : 'rgba(255, 255, 255, 0.8)',
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.15)',
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: theme.palette.primary.main,
+                          borderWidth: '1px'
+                        },
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        fontFamily: 'var(--font-display)',
+                        color: theme.palette.text.primary
+                      }}
                     >
                       {experienceOptions.map(opt => (
-                        <MenuItem key={opt.value} value={opt.value}>
+                        <MenuItem key={opt.value} value={opt.value} sx={{ fontSize: '13px', fontWeight: 500 }}>
                           {opt.label}
                         </MenuItem>
                       ))}

@@ -24,9 +24,9 @@ export const getAppTheme = (mode) => {
         dark: '#111111',
       },
       background: {
-        default: isDark ? '#1d1e20' : '#ffffff',
-        paper: isDark ? '#2b2d30' : '#ffffff',
-        glass: isDark ? 'rgba(43, 45, 48, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+        default: isDark ? '#070a13' : '#ffffff',
+        paper: isDark ? '#0f1624' : '#ffffff',
+        glass: isDark ? 'rgba(15, 22, 36, 0.8)' : 'rgba(255, 255, 255, 0.95)',
       },
       text: {
         primary: isDark ? '#ffffff' : '#222222',
@@ -119,7 +119,7 @@ export const getAppTheme = (mode) => {
       MuiCard: {
         styleOverrides: {
           root: {
-            background: isDark ? '#2b2d30' : '#ffffff',
+            background: isDark ? '#0f1624' : '#ffffff',
             backdropFilter: 'none',
             border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(34, 34, 34, 0.12)'}`,
             borderRadius: 14,
@@ -152,7 +152,7 @@ export const getAppTheme = (mode) => {
         styleOverrides: {
           root: {
             '& .MuiOutlinedInput-root': {
-              backgroundColor: isDark ? 'rgba(43, 45, 48, 0.5)' : '#ffffff',
+              backgroundColor: isDark ? 'rgba(15, 22, 36, 0.5)' : '#ffffff',
               transition: 'border-color 0.2s, box-shadow 0.2s',
               borderRadius: 8,
               '& fieldset': {
@@ -178,7 +178,7 @@ export const getAppTheme = (mode) => {
         },
         styleOverrides: {
           root: {
-            backgroundColor: isDark ? 'rgba(43, 45, 48, 0.5)' : '#ffffff',
+            backgroundColor: isDark ? 'rgba(15, 22, 36, 0.5)' : '#ffffff',
             borderRadius: 8,
             '& .MuiOutlinedInput-notchedOutline': {
               borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(34, 34, 34, 0.12)',
@@ -196,7 +196,7 @@ export const getAppTheme = (mode) => {
       MuiDialog: {
         styleOverrides: {
           paper: {
-            background: isDark ? '#2b2d30' : '#ffffff',
+            background: isDark ? '#0f1624' : '#ffffff',
             backdropFilter: 'none',
             border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(34, 34, 34, 0.12)'}`,
             boxShadow: isDark ? '0 16px 40px rgba(0, 0, 0, 0.6)' : '0 16px 40px rgba(0, 0, 0, 0.1)',

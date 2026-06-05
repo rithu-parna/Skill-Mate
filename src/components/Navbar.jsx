@@ -78,7 +78,15 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
               }}
             >
               SkillMate
-              <AutoAwesomeIcon sx={{ color: theme.palette.primary.main, fontSize: 14 }} />
+              <Box component="span" sx={{ 
+                width: '6px', 
+                height: '6px', 
+                borderRadius: '50%', 
+                backgroundColor: theme.palette.primary.main, 
+                ml: 0.5, 
+                display: 'inline-block', 
+                alignSelf: 'center' 
+              }} />
             </Typography>
             <Typography 
               variant="caption" 
@@ -209,24 +217,49 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
               </IconButton>
             </Box>
           ) : (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <Button 
                 onClick={onOpenLogin}
                 variant="outlined"
-                size="small"
-                startIcon={<LoginIcon sx={{ fontSize: 14 }} />}
-                sx={{ py: '6px' }}
+                size="medium"
+                startIcon={<LoginIcon sx={{ fontSize: 16 }} />}
+                sx={{ 
+                  py: '8px',
+                  px: '18px',
+                  borderRadius: '8px',
+                  borderColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                  color: theme.palette.text.primary,
+                  fontWeight: 600,
+                  fontSize: '13px',
+                  fontFamily: 'var(--font-display)',
+                  textTransform: 'none',
+                  '&:hover': {
+                    borderColor: theme.palette.text.primary,
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)'
+                  }
+                }}
               >
                 Log In
               </Button>
               <Button 
                 onClick={onOpenRegister}
                 variant="contained"
-                size="small"
+                size="medium"
                 color="primary"
-                startIcon={<PersonAddIcon sx={{ fontSize: 14 }} />}
+                startIcon={<PersonAddIcon sx={{ fontSize: 16 }} />}
                 sx={{ 
-                  py: '6px',
+                  py: '8px',
+                  px: '18px',
+                  borderRadius: '8px',
+                  fontWeight: 600,
+                  fontSize: '13px',
+                  fontFamily: 'var(--font-display)',
+                  textTransform: 'none',
+                  boxShadow: 'none',
+                  '&:hover': {
+                    backgroundColor: theme.palette.primary.dark,
+                    boxShadow: 'none'
+                  }
                 }}
               >
                 Register
