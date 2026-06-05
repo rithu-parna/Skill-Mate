@@ -96,7 +96,7 @@ function AppContent() {
   const hasActiveFilters = filters.search || filters.category !== 'all' || filters.location || filters.experience !== 'all';
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: theme.palette.background.default }}>
+    <Box className={isDarkMode ? 'dark-theme' : 'light-theme'} sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: theme.palette.background.default }}>
       
       {/* Navigation header */}
       <Navbar 
@@ -120,7 +120,7 @@ function AppContent() {
             <HeroSection />
 
             {/* Content Filters & Directory list */}
-            <Container maxWidth="lg" sx={{ py: { xs: 6, md: 8 } }}>
+            <Container id="category-filter-section" maxWidth="lg" sx={{ py: { xs: 6, md: 8 } }}>
               
               {/* Filters Panel Header */}
               <Box sx={{
