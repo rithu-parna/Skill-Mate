@@ -28,6 +28,7 @@ import {
 import FilterIcon from '@mui/icons-material/FilterAlt';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
 import GridViewIcon from '@mui/icons-material/GridView';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function AppContent() {
@@ -293,10 +294,104 @@ function AppContent() {
                 ) : (
                   <Grid container spacing={3}>
                     {filteredProfiles.map(profile => (
-                      <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }} key={profile.id}>
+                      <Grid size={{ xs: 12, sm: 6, md: 6, lg: 3 }} key={profile.id}>
                         <JobCard profile={profile} />
                       </Grid>
                     ))}
+
+                    {/* Glowing AI matchmaking request card */}
+                    <Grid size={{ xs: 12, sm: 6, md: 6, lg: 3 }}>
+                      <Box sx={{
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        p: 3,
+                        borderRadius: '20px',
+                        background: isDarkMode ? 'rgba(15, 22, 36, 0.6)' : 'rgba(255, 255, 255, 0.7)',
+                        border: `1.5px dashed ${isDarkMode ? 'rgba(20, 168, 0, 0.35)' : 'rgba(20, 168, 0, 0.25)'}`,
+                        boxShadow: isDarkMode ? '0 10px 30px rgba(0, 0, 0, 0.4)' : '0 10px 30px rgba(0, 0, 0, 0.03)',
+                        backdropFilter: 'blur(16px)',
+                        '-webkit-backdrop-filter': 'blur(16px)',
+                        position: 'relative',
+                        overflow: 'hidden'
+                      }}>
+                        {/* Concentric spinning rings & glowing icon */}
+                        <Box sx={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          height: '160px',
+                          position: 'relative',
+                          mb: 2,
+                          mt: 1
+                        }}>
+                          {/* Glowing green background sphere */}
+                          <Box sx={{
+                            position: 'absolute',
+                            width: '90px',
+                            height: '90px',
+                            borderRadius: '50%',
+                            backgroundColor: 'rgba(20, 168, 0, 0.15)',
+                            filter: 'blur(15px)',
+                            boxShadow: '0 0 25px rgba(20, 168, 0, 0.25)',
+                          }} />
+                          {/* Ring 1 */}
+                          <Box sx={{
+                            position: 'absolute',
+                            width: '120px',
+                            height: '120px',
+                            borderRadius: '50%',
+                            border: '1px dashed rgba(20, 168, 0, 0.25)',
+                          }} />
+                          {/* Ring 2 */}
+                          <Box sx={{
+                            position: 'absolute',
+                            width: '90px',
+                            height: '90px',
+                            borderRadius: '50%',
+                            border: '1.5px solid rgba(20, 168, 0, 0.25)',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: isDarkMode ? 'rgba(15, 22, 36, 0.6)' : 'rgba(255, 255, 255, 0.8)',
+                          }}>
+                            <AutoAwesomeIcon sx={{ color: '#14a800', fontSize: 36 }} />
+                          </Box>
+                        </Box>
+
+                        <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '18px', textAlign: 'center', mb: 1.5, fontFamily: 'var(--font-display)' }}>
+                          Can't find the right match?
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: theme.palette.text.secondary, textAlign: 'center', fontSize: '13px', px: 2, mb: 4, lineHeight: 1.5 }}>
+                          Let our AI matchmaker find the best talent for you.
+                        </Typography>
+
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          startIcon={<AutoAwesomeIcon sx={{ fontSize: 14 }} />}
+                          sx={{
+                            width: '100%',
+                            textTransform: 'none',
+                            fontWeight: 700,
+                            fontSize: '13px',
+                            py: 1.2,
+                            borderRadius: '10px',
+                            borderColor: 'rgba(20, 168, 0, 0.45)',
+                            color: theme.palette.primary.main,
+                            '&:hover': {
+                              borderColor: theme.palette.primary.main,
+                              backgroundColor: 'rgba(20, 168, 0, 0.05)',
+                              boxShadow: '0 0 15px rgba(20, 168, 0, 0.2)',
+                            }
+                          }}
+                        >
+                          Request a Match
+                        </Button>
+                      </Box>
+                    </Grid>
+
                   </Grid>
                 )}
               </AnimatePresence>

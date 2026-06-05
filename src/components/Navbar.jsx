@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import { 
-  AppBar, 
   Typography, 
   Button, 
   IconButton, 
@@ -23,16 +22,12 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
   const theme = useTheme();
 
   return (
-    <AppBar 
-      position="sticky" 
-      elevation={0}
+    <Box 
       className="navbar-island"
       sx={{
+        position: 'sticky',
         top: '20px',
         zIndex: 1100,
-        backgroundColor: 'transparent',
-        border: 'none',
-        boxShadow: 'none',
         mb: 4
       }}
     >
@@ -327,6 +322,6 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
           <span className="nav-link">About</span>
         </Box>
       </Box>
-    </AppBar>
+    </Box>
   );
 };
