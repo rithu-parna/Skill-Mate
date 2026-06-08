@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import { 
   Dialog, 
@@ -25,6 +25,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import SparklesIcon from '@mui/icons-material/AutoAwesome';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import PersonIcon from '@mui/icons-material/Person';
 
 export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
   const { loginUser } = useContext(AppContext);
@@ -36,34 +37,6 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  // Auto-cycling feature slider
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = [
-    {
-      icon: <LockIcon sx={{ color: '#14a800', fontSize: 22 }} />,
-      title: 'Secure & Private',
-      desc: 'Your data is 100% protected'
-    },
-    {
-      icon: <SparklesIcon sx={{ color: '#14a800', fontSize: 22 }} />,
-      title: 'Smart Matching',
-      desc: 'AI matches the right opportunities'
-    },
-    {
-      icon: <CheckCircleIcon sx={{ color: '#14a800', fontSize: 22 }} />,
-      title: 'Verified Profiles',
-      desc: 'Only verified talents and clients'
-    }
-  ];
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 3500);
-    return () => clearInterval(interval);
-  }, [isOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -110,13 +83,13 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
     >
       <Grid container>
         {/* Left Info Panel */}
-        <Grid size={{ xs: 12, md: 5.2 }} sx={{
+        <Grid size={{ xs: 12, md: 5.4 }} sx={{
           background: isDark 
             ? 'radial-gradient(circle at center, rgba(20, 168, 0, 0.22) 0%, rgba(7, 10, 19, 0) 80%), #070a13'
             : 'radial-gradient(circle at center, rgba(20, 168, 0, 0.08) 0%, rgba(255, 255, 255, 0) 80%), #f5f5f5',
           borderRight: { xs: 'none', md: `1.5px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'}` },
           borderBottom: { xs: `1.5px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'}`, md: 'none' },
-          p: { xs: 4, md: 5.5 },
+          p: { xs: 3.5, md: 4.5 },
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
@@ -147,125 +120,229 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
             </Typography>
           </Box>
 
-          {/* Center Glowing Lock Art */}
+          {/* Center Glowing Lock Art (Orbit System) */}
           <Box sx={{ 
             display: 'flex', 
             justifyContent: 'center', 
             alignItems: 'center', 
-            my: { xs: 3, md: 4 },
+            my: { xs: 3, md: 4.5 },
             position: 'relative',
-            zIndex: 1
+            zIndex: 1,
+            height: 220
           }}>
             <Box sx={{
               position: 'relative',
-              width: { xs: 180, md: 220 },
-              height: { xs: 180, md: 220 },
+              width: 200,
+              height: 200,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
-              {/* Outer orbit rings decoration */}
+              {/* Slanted orbit rings */}
               <Box sx={{
                 position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
+                width: '100%',
+                height: '100%',
                 borderRadius: '50%',
-                border: '1.5px solid rgba(20, 168, 0, 0.15)',
-                animation: 'spin 12s linear infinite',
+                border: '1.5px dashed rgba(20, 168, 0, 0.35)',
+                transform: 'rotateX(60deg) rotateY(-15deg)',
+                animation: 'spin 15s linear infinite',
                 '@keyframes spin': {
-                  '0%': { transform: 'rotate(0deg)' },
-                  '100%': { transform: 'rotate(360deg)' }
+                  '0%': { transform: 'rotateX(60deg) rotateY(-15deg) rotate(0deg)' },
+                  '100%': { transform: 'rotateX(60deg) rotateY(-15deg) rotate(360deg)' }
                 }
               }} />
               <Box sx={{
                 position: 'absolute',
-                top: 15,
-                left: 15,
-                right: 15,
-                bottom: 15,
+                width: '85%',
+                height: '85%',
                 borderRadius: '50%',
-                border: '1px dashed rgba(20, 168, 0, 0.25)',
-                animation: 'spin-reverse 8s linear infinite',
+                border: '1px solid rgba(20, 168, 0, 0.15)',
+                transform: 'rotateX(60deg) rotateY(15deg)',
+                animation: 'spin-reverse 12s linear infinite',
                 '@keyframes spin-reverse': {
-                  '0%': { transform: 'rotate(360deg)' },
-                  '100%': { transform: 'rotate(0deg)' }
+                  '0%': { transform: 'rotateX(60deg) rotateY(15deg) rotate(360deg)' },
+                  '100%': { transform: 'rotateX(60deg) rotateY(15deg) rotate(0deg)' }
                 }
               }} />
 
-              {/* 3D padlock asset */}
-              <Box 
-                component="img"
-                src="/images/login_lock.png"
-                alt="Cybersecurity Lock Illustration"
-                sx={{
-                  width: '90%',
-                  height: '90%',
-                  objectFit: 'contain',
-                  filter: 'drop-shadow(0 0 25px rgba(20, 168, 0, 0.45))'
-                }}
-              />
-            </Box>
-          </Box>
-
-          {/* Bottom auto carousel slider */}
-          <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <Box sx={{
-              p: 2.2,
-              borderRadius: '16px',
-              border: `1.5px solid ${isDark ? 'rgba(20, 168, 0, 0.25)' : 'rgba(20, 168, 0, 0.15)'}`,
-              backgroundColor: isDark ? 'rgba(20, 168, 0, 0.04)' : 'rgba(20, 168, 0, 0.02)',
-              textAlign: 'center',
-              minHeight: '115px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              transition: 'all 0.3s ease-in-out'
-            }}>
+              {/* Central glowing padlock capsule */}
               <Box sx={{
-                width: 38,
-                height: 38,
+                width: 76,
+                height: 76,
                 borderRadius: '50%',
                 backgroundColor: 'rgba(20, 168, 0, 0.1)',
+                border: '2px solid #14a800',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                mb: 1
+                boxShadow: '0 0 35px rgba(20, 168, 0, 0.45)',
+                zIndex: 2,
+                position: 'relative'
               }}>
-                {slides[currentSlide].icon}
+                <LockIcon sx={{ color: '#14a800', fontSize: 32 }} />
               </Box>
-              <Typography sx={{ fontWeight: 800, color: isDark ? '#fff' : '#070a13', fontSize: '13px' }}>
-                {slides[currentSlide].title}
-              </Typography>
-              <Typography sx={{ color: isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)', fontSize: '11px', mt: 0.4 }}>
-                {slides[currentSlide].desc}
-              </Typography>
+
+              {/* Orbit nodes */}
+              {/* Left Node */}
+              <Box sx={{
+                position: 'absolute',
+                left: 15,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                backgroundColor: 'rgba(20, 168, 0, 0.2)',
+                border: '1.5px solid #14a800',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 0 15px rgba(20, 168, 0, 0.3)',
+                zIndex: 3
+              }}>
+                <PersonIcon sx={{ fontSize: 16, color: '#14a800' }} />
+              </Box>
+
+              {/* Right Node */}
+              <Box sx={{
+                position: 'absolute',
+                right: 15,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: 32,
+                height: 32,
+                borderRadius: '50%',
+                backgroundColor: isDark ? '#0f1624' : '#fff',
+                border: `1.5px solid ${isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)'}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+                zIndex: 3
+              }}>
+                <PersonIcon sx={{ fontSize: 16, color: isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)' }} />
+              </Box>
             </Box>
+          </Box>
+
+          {/* Bottom 3-column features side-by-side */}
+          <Box sx={{ position: 'relative', zIndex: 1 }}>
+            <Grid container spacing={1.5} sx={{ mb: 2 }}>
+              <Grid size={{ xs: 4 }}>
+                <Box sx={{
+                  p: 1.5,
+                  borderRadius: '12px',
+                  border: `1.5px solid ${isDark ? 'rgba(20, 168, 0, 0.25)' : 'rgba(20, 168, 0, 0.15)'}`,
+                  backgroundColor: isDark ? 'rgba(20, 168, 0, 0.04)' : 'rgba(20, 168, 0, 0.02)',
+                  textAlign: 'center',
+                  minHeight: '105px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <Box sx={{
+                    width: 30,
+                    height: 30,
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(20, 168, 0, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 0.8
+                  }}>
+                    <LockIcon sx={{ color: '#14a800', fontSize: 16 }} />
+                  </Box>
+                  <Typography sx={{ fontWeight: 800, color: isDark ? '#fff' : '#070a13', fontSize: '10px' }}>
+                    Secure & Private
+                  </Typography>
+                  <Typography sx={{ color: isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.45)', fontSize: '8px', mt: 0.3 }}>
+                    Your data is 100% protected
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid size={{ xs: 4 }}>
+                <Box sx={{
+                  p: 1.5,
+                  borderRadius: '12px',
+                  border: `1.5px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.01)' : 'rgba(0, 0, 0, 0.01)',
+                  textAlign: 'center',
+                  minHeight: '105px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <Box sx={{
+                    width: 30,
+                    height: 30,
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(20, 168, 0, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 0.8
+                  }}>
+                    <SparklesIcon sx={{ color: '#14a800', fontSize: 16 }} />
+                  </Box>
+                  <Typography sx={{ fontWeight: 800, color: isDark ? '#fff' : '#070a13', fontSize: '10px' }}>
+                    Smart Matching
+                  </Typography>
+                  <Typography sx={{ color: isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.45)', fontSize: '8px', mt: 0.3 }}>
+                    AI matches the right opportunities
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid size={{ xs: 4 }}>
+                <Box sx={{
+                  p: 1.5,
+                  borderRadius: '12px',
+                  border: `1.5px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.01)' : 'rgba(0, 0, 0, 0.01)',
+                  textAlign: 'center',
+                  minHeight: '105px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <Box sx={{
+                    width: 30,
+                    height: 30,
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(20, 168, 0, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 0.8
+                  }}>
+                    <CheckCircleIcon sx={{ color: '#14a800', fontSize: 16 }} />
+                  </Box>
+                  <Typography sx={{ fontWeight: 800, color: isDark ? '#fff' : '#070a13', fontSize: '10px' }}>
+                    Verified Profiles
+                  </Typography>
+                  <Typography sx={{ color: isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.45)', fontSize: '8px', mt: 0.3 }}>
+                    Only verified talents and clients
+                  </Typography>
+                </Box>
+              </Grid>
+            </Grid>
 
             {/* Dots */}
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, mt: 1.8 }}>
-              {slides.map((_, idx) => (
-                <Box
-                  key={idx}
-                  onClick={() => setCurrentSlide(idx)}
-                  sx={{
-                    width: idx === currentSlide ? 8 : 6,
-                    height: idx === currentSlide ? 8 : 6,
-                    borderRadius: '50%',
-                    backgroundColor: idx === currentSlide ? '#14a800' : (isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'),
-                    cursor: 'pointer',
-                    transition: 'all 0.2s'
-                  }}
-                />
-              ))}
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, mt: 1 }}>
+              <Box sx={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#14a800' }} />
+              <Box sx={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' }} />
+              <Box sx={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' }} />
             </Box>
           </Box>
         </Grid>
 
         {/* Right Input Form Panel */}
-        <Grid size={{ xs: 12, md: 6.8 }} sx={{
+        <Grid size={{ xs: 12, md: 6.6 }} sx={{
           p: { xs: 4, md: 5.5 },
           backgroundColor: isDark ? '#0b0f19' : '#ffffff',
           position: 'relative',
@@ -473,6 +550,7 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
                 <input
                   type="checkbox"
                   id="remember-me"
+                  defaultChecked
                   style={{
                     accentColor: '#14a800',
                     width: '16px',
@@ -493,7 +571,6 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
             <Button 
               fullWidth
               type="submit" 
-              variant="contained" 
               disabled={loading}
               sx={{
                 py: 1.6,
