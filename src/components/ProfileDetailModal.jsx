@@ -9,7 +9,8 @@ import {
   Button, 
   IconButton, 
   Avatar, 
-  useTheme
+  useTheme,
+  useMediaQuery
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -38,6 +39,7 @@ export const ProfileDetailModal = ({ onOpenLogin }) => {
 
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const profile = profiles.find(p => p.id === selectedProfileId);
   if (!profile) return null;
@@ -89,14 +91,15 @@ export const ProfileDetailModal = ({ onOpenLogin }) => {
       onClose={() => setSelectedProfileId(null)}
       maxWidth="md"
       fullWidth
+      fullScreen={isMobile}
       sx={{
         '& .MuiDialog-paper': {
           overflow: 'hidden',
-          borderRadius: '24px',
+          borderRadius: isMobile ? 0 : '24px',
           position: 'relative',
           background: isDark ? '#070a13' : '#fafafa',
-          border: `1.5px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'}`,
-          boxShadow: '0 24px 60px rgba(0,0,0,0.8)'
+          border: isMobile ? 'none' : `1.5px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'}`,
+          boxShadow: isMobile ? 'none' : '0 24px 60px rgba(0,0,0,0.8)'
         }
       }}
     >
@@ -123,9 +126,9 @@ export const ProfileDetailModal = ({ onOpenLogin }) => {
 
       {/* SPACE/NEBULA HEADER BANNER */}
       <Box sx={{
-        px: { xs: 3, md: 5.5 },
-        pt: { xs: 4, md: 6 },
-        pb: { xs: 3, md: 4.5 },
+        px: { xs: 2.5, md: 5.5 },
+        pt: { xs: 5, md: 6 },
+        pb: { xs: 2.5, md: 4.5 },
         position: 'relative',
         background: isDark 
           ? 'radial-gradient(ellipse at top left, rgba(20, 168, 0, 0.28) 0%, rgba(7, 10, 19, 0) 65%), radial-gradient(ellipse at top right, rgba(20, 168, 0, 0.1) 0%, rgba(7, 10, 19, 0) 65%), #070a13'
@@ -133,7 +136,7 @@ export const ProfileDetailModal = ({ onOpenLogin }) => {
         borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
         display: 'flex',
         alignItems: 'center',
-        gap: { xs: 3, md: 4 },
+        gap: { xs: 2.5, md: 4 },
         flexWrap: 'wrap'
       }}>
         {/* Double concentric glowing Avatar frame */}
@@ -322,7 +325,7 @@ export const ProfileDetailModal = ({ onOpenLogin }) => {
       </Box>
 
       {/* DOUBLE COLUMN SCROLLABLE BODY */}
-      <DialogContent sx={{ p: { xs: 3, md: 5.5 }, overflowY: 'auto', maxHeight: '55vh' }}>
+      <DialogContent sx={{ p: { xs: 2.5, md: 5.5 }, overflowY: 'auto', maxHeight: { xs: 'none', sm: '55vh' }, flexGrow: 1 }}>
         <Grid container spacing={{ xs: 4, md: 5 }}>
           
           {/* LEFT COLUMN: About, Experience, Education */}

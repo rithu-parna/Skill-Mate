@@ -12,6 +12,7 @@ import {
   InputAdornment,
   Link,
   useTheme,
+  useMediaQuery,
   Divider,
   Grid
 } from '@mui/material';
@@ -31,6 +32,7 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
   const { loginUser } = useContext(AppContext);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
   const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
@@ -96,29 +98,30 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
       onClose={onClose}
       maxWidth="md"
       fullWidth
+      fullScreen={isMobile}
       sx={{
         '& .MuiDialog-paper': {
           overflow: 'hidden',
-          borderRadius: '24px',
+          borderRadius: isMobile ? 0 : '24px',
           position: 'relative',
           background: isDark ? '#070a13' : '#fafafa',
-          border: `1.5px solid ${isDark ? 'rgba(20, 168, 0, 0.35)' : 'rgba(20, 168, 0, 0.15)'}`,
+          border: isMobile ? 'none' : `1.5px solid ${isDark ? 'rgba(20, 168, 0, 0.35)' : 'rgba(20, 168, 0, 0.15)'}`,
           boxShadow: isDark 
             ? '0 24px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(20, 168, 0, 0.15)'
             : '0 10px 30px rgba(0, 0, 0, 0.1)'
         }
       }}
     >
-      <Grid container>
+      <Grid container sx={{ height: '100%' }}>
         {/* Left Info Panel */}
         <Grid size={{ xs: 12, md: 5.4 }} sx={{
+          display: { xs: 'none', md: 'flex' },
           background: isDark 
             ? 'radial-gradient(circle at center, rgba(20, 168, 0, 0.22) 0%, rgba(7, 10, 19, 0) 80%), #070a13'
             : 'radial-gradient(circle at center, rgba(20, 168, 0, 0.08) 0%, rgba(255, 255, 255, 0) 80%), #f5f5f5',
           borderRight: { xs: 'none', md: `1.5px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'}` },
           borderBottom: { xs: `1.5px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'}`, md: 'none' },
           p: { xs: 3.5, md: 4.5 },
-          display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
           position: 'relative',
@@ -328,12 +331,14 @@ export const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
 
         {/* Right Input Form Panel */}
         <Grid size={{ xs: 12, md: 6.6 }} sx={{
-          p: { xs: 4, md: 5.5 },
+          p: { xs: 3, md: 5.5 },
           backgroundColor: isDark ? '#0b0f19' : '#ffffff',
           position: 'relative',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          minHeight: '100%',
+          overflowY: 'auto'
         }}>
           {/* Close Icon button in top right */}
           <IconButton 

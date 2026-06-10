@@ -16,6 +16,7 @@ import {
   FormControl,
   Link,
   useTheme,
+  useMediaQuery,
   InputAdornment,
   Divider
 } from '@mui/material';
@@ -41,6 +42,7 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
   const { registerJobSeeker, registerEmployer } = useContext(AppContext);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   
   const [activeTab, setActiveTab] = useState(1); // Default to Client (1) to match mockup
   const [step, setStep] = useState(0); // 0 = role selection, 1 = form
@@ -152,9 +154,10 @@ export const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
       onClose={onClose}
       maxWidth={step === 0 ? "md" : "sm"}
       fullWidth
+      fullScreen={isMobile}
       sx={{
         '& .MuiDialog-paper': {
-          maxHeight: '95vh',
+          maxHeight: isMobile ? '100vh' : '95vh',
           display: 'flex',
           flexDirection: 'column',
           position: 'relative',
