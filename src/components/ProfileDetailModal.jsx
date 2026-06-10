@@ -139,8 +139,8 @@ export const ProfileDetailModal = ({ onOpenLogin }) => {
         {/* Double concentric glowing Avatar frame */}
         <Box sx={{ position: 'relative' }}>
           <Box sx={{
-            width: 144,
-            height: 144,
+            width: { xs: 90, sm: 120, md: 144 },
+            height: { xs: 90, sm: 120, md: 144 },
             borderRadius: '50%',
             border: isDark ? '2px solid rgba(20, 168, 0, 0.3)' : '2px solid rgba(20, 168, 0, 0.15)',
             boxShadow: isDark ? '0 0 20px rgba(20, 168, 0, 0.25)' : 'none',
@@ -149,8 +149,8 @@ export const ProfileDetailModal = ({ onOpenLogin }) => {
             justifyContent: 'center'
           }}>
             <Box sx={{
-              width: 130,
-              height: 130,
+              width: { xs: 80, sm: 108, md: 130 },
+              height: { xs: 80, sm: 108, md: 130 },
               borderRadius: '50%',
               border: '2px solid #14a800',
               p: '3px',
@@ -208,7 +208,7 @@ export const ProfileDetailModal = ({ onOpenLogin }) => {
             sx={{ 
               fontWeight: 800, 
               color: isDark ? '#fff' : '#070a13', 
-              fontSize: { xs: '24px', md: '28px' }, 
+              fontSize: { xs: '19px', sm: '24px', md: '28px' }, 
               display: 'flex', 
               alignItems: 'center', 
               gap: 1, 
@@ -217,7 +217,7 @@ export const ProfileDetailModal = ({ onOpenLogin }) => {
             }}
           >
             {profile.name}
-            <CheckCircleIcon sx={{ color: '#14a800', fontSize: 20 }} />
+            <CheckCircleIcon sx={{ color: '#14a800', fontSize: { xs: 16, sm: 20 } }} />
           </Typography>
 
           <Typography 
@@ -225,7 +225,7 @@ export const ProfileDetailModal = ({ onOpenLogin }) => {
             sx={{ 
               color: theme.palette.text.secondary, 
               fontWeight: 600,
-              fontSize: '15px',
+              fontSize: { xs: '13px', sm: '15px' },
               mt: 0.5,
               mb: 2
             }}
@@ -471,7 +471,7 @@ export const ProfileDetailModal = ({ onOpenLogin }) => {
                   return (
                     <Grid size={{xs: 3}} key={num}>
                       <Box sx={{
-                        height: '68px',
+                        height: { xs: '54px', sm: '68px' },
                         borderRadius: '8px',
                         backgroundImage: profile.image ? `url(${profile.image})` : 'none',
                         backgroundColor: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)',

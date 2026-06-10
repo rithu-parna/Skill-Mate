@@ -52,22 +52,22 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
         <Box sx={{
           backgroundColor: '#14a800',
           borderRadius: '10px',
-          width: '38px',
-          height: '38px',
+          width: { xs: '30px', sm: '38px' },
+          height: { xs: '30px', sm: '38px' },
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           color: '#fff',
           boxShadow: '0 0 10px rgba(20, 168, 0, 0.4)'
         }}>
-          <WorkIcon sx={{ fontSize: 20 }} />
+          <WorkIcon sx={{ fontSize: { xs: 16, sm: 20 } }} />
         </Box>
         <Box>
           <Typography 
             variant="h6" 
             component="h1"
             sx={{ 
-              fontSize: '18px', 
+              fontSize: { xs: '15px', sm: '18px' }, 
               fontWeight: 800, 
               lineHeight: 1.1,
               color: '#fff',
@@ -78,14 +78,14 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
             }}
           >
             Skill<span style={{ color: '#14a800' }}>Mate</span>
-            <AutoAwesomeIcon sx={{ color: '#14a800', fontSize: 14 }} />
+            <AutoAwesomeIcon sx={{ color: '#14a800', fontSize: { xs: 11, sm: 14 } }} />
           </Typography>
           <Typography 
             variant="caption" 
             sx={{ 
               fontSize: '8.5px', 
               color: 'rgba(255, 255, 255, 0.45)', 
-              display: 'block', 
+              display: { xs: 'none', sm: 'block' }, 
               marginTop: '1px',
               fontWeight: 800,
               letterSpacing: '0.08em',
@@ -132,7 +132,7 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
       <Box sx={{ 
         display: 'flex', 
         alignItems: 'center', 
-        gap: 1.8
+        gap: { xs: 1, sm: 1.8 }
       }}>
         
         {/* Saved Bookmarks Button */}
@@ -143,14 +143,14 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
               border: `1.5px solid ${favorites.length > 0 ? '#14a800' : 'rgba(255,255,255,0.1)'}`,
               borderRadius: '50%',
               color: favorites.length > 0 ? '#14a800' : '#fff',
-              p: '8px',
+              p: { xs: '6px', sm: '8px' },
               backgroundColor: favorites.length > 0 ? 'rgba(20, 168, 0, 0.05)' : 'transparent',
               '&:hover': {
                 backgroundColor: 'rgba(255, 255, 255, 0.05)'
               }
             }}
           >
-            <FavoriteIcon sx={{ fontSize: 16 }} />
+            <FavoriteIcon sx={{ fontSize: { xs: 14, sm: 16 } }} />
           </IconButton>
         </Tooltip>
 
@@ -162,13 +162,13 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
               border: '1.5px solid rgba(255,255,255,0.1)', 
               borderRadius: '50%',
               color: '#fff',
-              p: '8px',
+              p: { xs: '6px', sm: '8px' },
               '&:hover': {
                 backgroundColor: 'rgba(255, 255, 255, 0.05)'
               }
             }}
           >
-            {isDarkMode ? <LightModeIcon sx={{ fontSize: 16, color: '#f59e0b' }} /> : <DarkModeIcon sx={{ fontSize: 16, color: 'inherit' }} />}
+            {isDarkMode ? <LightModeIcon sx={{ fontSize: { xs: 14, sm: 16 }, color: '#f59e0b' }} /> : <DarkModeIcon sx={{ fontSize: { xs: 14, sm: 16 }, color: 'inherit' }} />}
           </IconButton>
         </Tooltip>
 
@@ -231,7 +231,7 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
             </Button>
           </Box>
         ) : (
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.8, sm: 1.5 } }}>
             <Button 
               onClick={onOpenLogin}
               variant="text" 
@@ -239,8 +239,8 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
                 color: '#fff', 
                 textTransform: 'none', 
                 fontWeight: 800,
-                fontSize: '13px',
-                px: 1.5,
+                fontSize: { xs: '12px', sm: '13px' },
+                px: { xs: 1, sm: 1.5 },
                 '&:hover': { 
                   color: '#14a800',
                   backgroundColor: 'transparent'
@@ -252,14 +252,14 @@ export const Navbar = ({ onOpenLogin, onOpenRegister, onShowDashboard, showDashb
             <Button 
               onClick={onOpenRegister}
               variant="contained" 
-              startIcon={<PersonAddIcon sx={{ fontSize: 14 }} />}
+              startIcon={<PersonAddIcon sx={{ display: { xs: 'none', sm: 'block' }, fontSize: 14 }} />}
               sx={{ 
                 backgroundColor: '#14a800',
                 color: '#fff',
                 borderRadius: '10px',
-                px: 2.5,
-                py: 0.9,
-                fontSize: '12.5px',
+                px: { xs: 1.5, sm: 2.5 },
+                py: { xs: 0.7, sm: 0.9 },
+                fontSize: { xs: '11.5px', sm: '12.5px' },
                 fontWeight: 800,
                 textTransform: 'none',
                 boxShadow: '0 0 15px rgba(20, 168, 0, 0.35)',

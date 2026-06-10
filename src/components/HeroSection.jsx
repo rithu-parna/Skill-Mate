@@ -84,7 +84,7 @@ export const HeroSection = () => {
               variant="h2" 
               component="h1"
               sx={{
-                fontSize: { xs: '34px', sm: '46px', md: '54px' },
+                fontSize: { xs: '28px', sm: '38px', md: '54px' },
                 fontWeight: 800,
                 lineHeight: 1.12,
                 color: theme.palette.text.primary,
@@ -107,11 +107,11 @@ export const HeroSection = () => {
             <Typography 
               variant="body1" 
               sx={{
-                fontSize: { xs: '15px', md: '16.5px' },
+                fontSize: { xs: '13px', sm: '14.5px', md: '16.5px' },
                 fontWeight: 400,
                 lineHeight: 1.6,
                 color: theme.palette.text.secondary,
-                mb: 4.5,
+                mb: { xs: 3, md: 4.5 },
                 maxWidth: '600px'
               }}
             >
@@ -188,12 +188,12 @@ export const HeroSection = () => {
                 endIcon={<ArrowForwardIcon />}
                 sx={{
                   width: { xs: '100%', sm: 'auto' },
-                  px: 7,
-                  py: 1.4,
+                  px: { xs: 3, sm: 5, md: 7 },
+                  py: { xs: 1.2, sm: 1.4 },
                   borderRadius: '10px',
                   whiteSpace: 'nowrap',
                   fontWeight: 700,
-                  fontSize: '13px',
+                  fontSize: { xs: '12px', sm: '13px' },
                   fontFamily: 'var(--font-display)',
                   boxShadow: 'none',
                   '&:hover': {

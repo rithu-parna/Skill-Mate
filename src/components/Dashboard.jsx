@@ -110,7 +110,7 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
 
       {/* Guest/User Workspace Top welcome banner */}
       <Box sx={{
-        p: { xs: 3.5, md: 5 },
+        p: { xs: 2.5, sm: 3.5, md: 5 },
         borderRadius: '24px',
         mb: 5,
         border: `1.5px solid ${isDark ? 'rgba(20, 168, 0, 0.35)' : 'rgba(20, 168, 0, 0.15)'}`,
@@ -161,13 +161,13 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
             <span>User Workspace</span>
           </Box>
 
-          <Typography variant="h4" sx={{ fontWeight: 900, color: isDark ? '#fff' : '#070a13', mb: 1.5, fontSize: { xs: '28px', md: '36px' }, display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Typography variant="h4" sx={{ fontWeight: 900, color: isDark ? '#fff' : '#070a13', mb: 1.5, fontSize: { xs: '22px', sm: '28px', md: '36px' }, display: 'flex', alignItems: 'center', gap: 1 }}>
             {currentUser ? (
               <>Hello, <span style={{ color: '#14a800' }}>{currentUser.name.split(' ')[0]}</span>!</>
             ) : (
               <>Guest <span style={{ color: '#14a800' }}>Workspace</span></>
             )}
-            <SparklesIcon sx={{ color: '#14a800', fontSize: 22 }} />
+            <SparklesIcon sx={{ color: '#14a800', fontSize: { xs: 18, sm: 22 } }} />
           </Typography>
 
           <Typography variant="body2" sx={{ color: isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)', maxWidth: '620px', mb: 3.5, lineHeight: 1.5, fontSize: '13.5px' }}>
@@ -245,8 +245,8 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
         }}>
           {/* Orbital Padlock graphics */}
           <Box sx={{
-            width: 140,
-            height: 140,
+            width: { xs: 100, sm: 140 },
+            height: { xs: 100, sm: 140 },
             position: 'relative',
             display: 'flex',
             alignItems: 'center',
@@ -270,8 +270,8 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
 
             {/* Central lock capsule */}
             <Box sx={{
-              width: 58,
-              height: 58,
+              width: { xs: 44, sm: 58 },
+              height: { xs: 44, sm: 58 },
               borderRadius: '50%',
               backgroundColor: 'rgba(20, 168, 0, 0.1)',
               border: '1.5px solid #14a800',
@@ -280,16 +280,16 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
               justifyContent: 'center',
               boxShadow: '0 0 20px rgba(20, 168, 0, 0.35)'
             }}>
-              <LockIcon sx={{ color: '#14a800', fontSize: 24 }} />
+              <LockIcon sx={{ color: '#14a800', fontSize: { xs: 18, sm: 24 } }} />
             </Box>
 
             {/* Orbit nodes */}
             <Box sx={{
               position: 'absolute',
-              top: 15,
-              right: 15,
-              width: 26,
-              height: 26,
+              top: { xs: 10, sm: 15 },
+              right: { xs: 10, sm: 15 },
+              width: { xs: 20, sm: 26 },
+              height: { xs: 20, sm: 26 },
               borderRadius: '50%',
               backgroundColor: isDark ? '#0f1624' : '#fff',
               border: '1px solid rgba(255,255,255,0.15)',
@@ -298,14 +298,14 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
               justifyContent: 'center',
               boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
             }}>
-              <PersonIcon sx={{ fontSize: 13, color: '#14a800' }} />
+              <PersonIcon sx={{ fontSize: { xs: 10, sm: 13 }, color: '#14a800' }} />
             </Box>
             <Box sx={{
               position: 'absolute',
-              bottom: 25,
-              left: 5,
-              width: 26,
-              height: 26,
+              bottom: { xs: 15, sm: 25 },
+              left: { xs: 2, sm: 5 },
+              width: { xs: 20, sm: 26 },
+              height: { xs: 20, sm: 26 },
               borderRadius: '50%',
               backgroundColor: isDark ? '#0f1624' : '#fff',
               border: '1px solid rgba(255,255,255,0.15)',
@@ -314,14 +314,14 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
               justifyContent: 'center',
               boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
             }}>
-              <PersonIcon sx={{ fontSize: 13, color: '#14a800' }} />
+              <PersonIcon sx={{ fontSize: { xs: 10, sm: 13 }, color: '#14a800' }} />
             </Box>
             <Box sx={{
               position: 'absolute',
-              bottom: 15,
-              right: 15,
-              width: 26,
-              height: 26,
+              bottom: { xs: 10, sm: 15 },
+              right: { xs: 10, sm: 15 },
+              width: { xs: 20, sm: 26 },
+              height: { xs: 20, sm: 26 },
               borderRadius: '50%',
               backgroundColor: isDark ? '#0f1624' : '#fff',
               border: '1.5px solid #14a800',
@@ -330,7 +330,7 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
               justifyContent: 'center',
               boxShadow: '0 4px 10px rgba(20, 168, 0, 0.2)'
             }}>
-              <ShieldIcon sx={{ fontSize: 13, color: '#14a800' }} />
+              <ShieldIcon sx={{ fontSize: { xs: 10, sm: 13 }, color: '#14a800' }} />
             </Box>
           </Box>
 
@@ -851,24 +851,24 @@ export const Dashboard = ({ onOpenLogin, onOpenRegister }) => {
                   {/* Top info */}
                   <Box sx={{ display: 'flex', gap: 2.5, alignItems: 'center', mb: 4, flexWrap: 'wrap' }}>
                     {myProfile.image ? (
-                      <Avatar src={myProfile.image} variant="rounded" sx={{ width: 80, height: 80 }} />
+                      <Avatar src={myProfile.image} variant="rounded" sx={{ width: { xs: 60, sm: 80 }, height: { xs: 60, sm: 80 } }} />
                     ) : (
                       <Avatar
                         variant="rounded"
                         sx={{
-                          width: 80,
-                          height: 80,
+                          width: { xs: 60, sm: 80 },
+                          height: { xs: 60, sm: 80 },
                           backgroundColor: '#14a800',
                           color: '#fff',
                           fontWeight: 800,
-                          fontSize: '28px'
+                          fontSize: { xs: '20px', sm: '28px' }
                         }}
                       >
                         {myProfile.name.charAt(0)}
                       </Avatar>
                     )}
                     <Box sx={{ minWidth: 0 }}>
-                      <Typography variant="h5" sx={{ fontWeight: 800, color: isDark ? '#fff' : '#070a13', mb: 0.5 }}>
+                      <Typography variant="h5" sx={{ fontWeight: 800, color: isDark ? '#fff' : '#070a13', mb: 0.5, fontSize: { xs: '19px', sm: '22px', md: '25px' } }}>
                         {myProfile.name}
                       </Typography>
                       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>

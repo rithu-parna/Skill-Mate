@@ -97,7 +97,7 @@ export const JobCard = ({ profile }) => {
 
         {/* IMAGE / HEADER CONTAINER */}
         <Box sx={{
-          height: '220px',
+          height: { xs: '160px', sm: '190px', md: '220px' },
           position: 'relative',
           background: profile.image ? `url(${profile.image})` : getFallbackGradient(profile.name),
           backgroundSize: 'cover',
@@ -167,12 +167,12 @@ export const JobCard = ({ profile }) => {
           </IconButton>
 
           {/* Header Texts Overlay (Over image) */}
-          <Box sx={{ position: 'relative', zIndex: 2, px: 2.5, pb: 1 }}>
+          <Box sx={{ position: 'relative', zIndex: 2, px: { xs: 2, sm: 2.5 }, pb: 1 }}>
             <Typography 
               variant="h5" 
               sx={{ 
                 fontWeight: 800, 
-                fontSize: '20px', 
+                fontSize: { xs: '17px', sm: '19px', md: '20px' }, 
                 color: theme.palette.text.primary,
                 fontFamily: 'var(--font-display)',
                 lineHeight: 1.2
@@ -185,7 +185,7 @@ export const JobCard = ({ profile }) => {
               sx={{ 
                 color: theme.palette.text.secondary, 
                 fontWeight: 600,
-                fontSize: '13px',
+                fontSize: { xs: '11.5px', sm: '12.5px', md: '13px' },
                 mt: 0.2
               }}
             >
@@ -195,7 +195,7 @@ export const JobCard = ({ profile }) => {
         </Box>
 
         {/* CARD CONTENT */}
-        <CardContent sx={{ px: 2.5, pt: 1, pb: 2, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+        <CardContent sx={{ px: { xs: 2, sm: 2.5 }, pt: 1, pb: 2, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
           
           {/* Category Tag & Match Percentage Loader */}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -214,15 +214,15 @@ export const JobCard = ({ profile }) => {
             {/* Circular Progress score */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Box sx={{ textAlign: 'right' }}>
-                <Typography variant="body2" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '12px', lineHeight: 1 }}>
+                <Typography variant="body2" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: { xs: '11px', sm: '12px' }, lineHeight: 1 }}>
                   {matchScore}%
                 </Typography>
                 <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontSize: '8px', fontWeight: 700 }}>
                   Match
                 </Typography>
               </Box>
-              <Box sx={{ position: 'relative', display: 'inline-flex', width: 28, height: 28 }}>
-                <svg width="28" height="28" viewBox="0 0 36 36">
+              <Box sx={{ position: 'relative', display: 'inline-flex', width: { xs: 24, sm: 28 }, height: { xs: 24, sm: 28 } }}>
+                <svg width="100%" height="100%" viewBox="0 0 36 36">
                   {/* Outer circle track */}
                   <path
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -249,26 +249,26 @@ export const JobCard = ({ profile }) => {
             display: 'flex', 
             justifyContent: 'space-between',
             alignItems: 'center',
-            py: 1.5,
+            py: { xs: 1, sm: 1.5 },
             borderTop: `1px dashed ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'}`,
             borderBottom: `1px dashed ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'}`,
             mb: 2.2
           }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6 }}>
-              <AwardIcon sx={{ color: '#14a800', fontSize: 15 }} />
-              <Typography variant="body2" sx={{ fontSize: '11px', color: theme.palette.text.secondary, fontWeight: 700 }}>
+              <AwardIcon sx={{ color: '#14a800', fontSize: { xs: 13, sm: 15 } }} />
+              <Typography variant="body2" sx={{ fontSize: { xs: '10px', sm: '11px' }, color: theme.palette.text.secondary, fontWeight: 700 }}>
                 {profile.experience}+ Yrs Exp
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6 }}>
-              <GraduationIcon sx={{ color: '#a855f7', fontSize: 15 }} />
-              <Typography variant="body2" sx={{ fontSize: '11px', color: theme.palette.text.secondary, fontWeight: 700 }}>
+              <GraduationIcon sx={{ color: '#a855f7', fontSize: { xs: 13, sm: 15 } }} />
+              <Typography variant="body2" sx={{ fontSize: { xs: '10px', sm: '11px' }, color: theme.palette.text.secondary, fontWeight: 700 }}>
                 {profile.education.split(',')[0]}
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <MapPinIcon sx={{ color: theme.palette.text.secondary, opacity: 0.5, fontSize: 15 }} />
-              <Typography variant="body2" sx={{ fontSize: '11px', color: theme.palette.text.secondary, fontWeight: 700 }}>
+              <MapPinIcon sx={{ color: theme.palette.text.secondary, opacity: 0.5, fontSize: { xs: 13, sm: 15 } }} />
+              <Typography variant="body2" sx={{ fontSize: { xs: '10px', sm: '11px' }, color: theme.palette.text.secondary, fontWeight: 700 }}>
                 {profile.location.split(',')[0]}
               </Typography>
             </Box>
@@ -306,18 +306,18 @@ export const JobCard = ({ profile }) => {
           </Box>
 
           {/* Action buttons (View Profile & Unlock Contact side-by-side) */}
-          <Box sx={{ display: 'flex', gap: 1.5 }}>
+          <Box sx={{ display: 'flex', gap: { xs: 1, sm: 1.5 } }}>
             <Button
               onClick={() => setSelectedProfileId(profile.id)}
               variant="text"
-              startIcon={<VisibilityIcon sx={{ fontSize: 14 }} />}
+              startIcon={<VisibilityIcon sx={{ display: { xs: 'none', sm: 'block' }, fontSize: 14 }} />}
               sx={{
                 flex: 1,
                 textTransform: 'none',
                 fontWeight: 700,
                 color: theme.palette.text.primary,
-                fontSize: '12px',
-                py: 1,
+                fontSize: { xs: '11px', sm: '12px' },
+                py: { xs: 0.8, sm: 1 },
                 borderRadius: '10px',
                 backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.04)',
                 '&:hover': {
@@ -331,13 +331,13 @@ export const JobCard = ({ profile }) => {
               onClick={() => setSelectedProfileId(profile.id)}
               variant="contained"
               color={isUnlocked ? "secondary" : "primary"}
-              startIcon={isUnlocked ? <CheckCircleIcon sx={{ fontSize: 14 }} /> : <LockIcon sx={{ fontSize: 14 }} />}
+              startIcon={isUnlocked ? <CheckCircleIcon sx={{ display: { xs: 'none', sm: 'block' }, fontSize: 14 }} /> : <LockIcon sx={{ display: { xs: 'none', sm: 'block' }, fontSize: 14 }} />}
               sx={{
                 flex: 1.2,
                 textTransform: 'none',
                 fontWeight: 700,
-                fontSize: '12px',
-                py: 1,
+                fontSize: { xs: '11px', sm: '12px' },
+                py: { xs: 0.8, sm: 1 },
                 borderRadius: '10px',
                 boxShadow: isUnlocked ? 'none' : '0 4px 15px rgba(20, 168, 0, 0.25)',
                 '&:hover': {

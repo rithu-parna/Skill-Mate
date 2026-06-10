@@ -460,3 +460,42 @@ label {
 .light-theme .navbar-island input::placeholder {
   color: rgba(7, 10, 19, 0.4);
 }
+
+@media (max-width: 600px) {
+  input, select, textarea {
+    font-size: 13px !important;
+    padding: 10px 14px !important;
+  }
+  
+  .btn {
+    font-size: 13px !important;
+    padding: 10px 18px !important;
+  }
+  
+  .btn-sm {
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+  }
+  
+  .badge {
+    font-size: 10px !important;
+    padding: 3px 8px !important;
+  }
+  
+  .container {
+    padding: 0 16px !important;
+  }
+  
+  .grid-cols-dynamic {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+    gap: 16px !important;
+  }
+  
+  .navbar-island {
+    margin: 12px 12px 0 12px !important;
+    border-radius: 16px !important;
+    padding: 10px 14px !important;
+    margin-bottom: 20px !important;
+  }
+}
+
